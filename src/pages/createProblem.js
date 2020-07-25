@@ -46,7 +46,9 @@ class CreateProblem extends Component {
         // console.log("from render-> ",problemStatement);
         return (
             <div className="row">
+                <div className="w-50">
                 <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} />
+                </div>
                 <div className="w-50">
                     <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>
                         Create a new Problem

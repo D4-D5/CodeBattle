@@ -16,7 +16,7 @@ function ProblemSection({problemTitle,problemStatement}) {
         }
     );
     return (
-        <div className="w-50">
+        <div className="">
             <Card>
                 <Card.Header>
                     <Tabs defaultActiveKey="Problem" id="uncontrolled-tab-example">
