@@ -1,11 +1,67 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import AceEditor from "react-ace";
 import { Base64 } from 'js-base64'
+import { FaAngleUp } from 'react-icons/fa';
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-monokai";
-import { Button, Card, Tabs, Tab } from 'react-bootstrap';
+import { Button, Card, Tabs, Tab, ButtonGroup, DropdownButton, Dropdown } from 'react-bootstrap';
+import ProblemSection from '../components/problemSection';
+import SplitPane from 'react-split-pane';
+import styled from "styled-components";
 
 var recur_cnt = 0;
+
+const Wrapper = styled.div`
+  .Resizer {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #000;
+    opacity: 0.2;
+    z-index: 1;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+  }
+
+  .Resizer:hover {
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+  }
+
+  .Resizer.horizontal {
+    height: 11px;
+    margin: -5px 0;
+    border-top: 5px solid rgba(255, 255, 255, 0);
+    border-bottom: 5px solid rgba(255, 255, 255, 0);
+    cursor: row-resize;
+    width: 100%;
+  }
+
+  .Resizer.horizontal:hover {
+    border-top: 5px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+  }
+
+  .Resizer.vertical {
+    width: 11px;
+    margin: 0 -5px;
+    border-left: 5px solid rgba(255, 255, 255, 0);
+    border-right: 5px solid rgba(255, 255, 255, 0);
+    cursor: col-resize;
+  }
+
+  .Resizer.vertical:hover {
+    border-left: 5px solid rgba(0, 0, 0, 0.5);
+    border-right: 5px solid rgba(0, 0, 0, 0.5);
+  }
+  ${'' /* .Pane1 {
+    background-color: blue;
+  }
+  .Pane2 {
+    background-color: red;
+  } */}
+`;
 
 function getASubmission(token) {
     // const code = this.state.code
@@ -60,11 +116,39 @@ function getASubmission(token) {
             }
         )
 }
+
+
+function UserGreeting(props) {
+    const [activetab, setActivetab] = useState('result');
+    return (
+        <Card style={{ position: 'absolute', bottom: 39, right: 0, left: 40, top: "50%" }}>
+            <Card.Header>
+                <Tabs
+                    id="controlled-tab-example"
+                    activeKey={activetab}
+                    onSelect={(activetab) => setActivetab(activetab)}
+                >
+                    <Tab eventKey="testcase" title="Test Cases">
+                    </Tab>
+                    <Tab eventKey="result" title="Result">
+                    </Tab>
+                </Tabs>
+            </Card.Header>
+            <Card.Body>
+                {activetab === "testcase" ? <div><textarea></textarea></div> : null}
+            </Card.Body>
+        </Card>
+    );
+}
+
+
+
 class Editor extends Component {
     state = {
         code: "",
         input: ""
     }
+    defaultCPP = '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}';
     onChange = (newValue) => {
         // console.log(newValue);
         this.setState({
@@ -124,44 +208,71 @@ class Editor extends Component {
     }
     render() {
         return (
-            <div className="row" style={{ height: "92vh" }}>
-                <div className="w-50">
-                    <Card>
+            <div className="row">
+
+                <Wrapper>
+                    <SplitPane split="vertical" defaultSize="50%" minSize="300">
+                        {/* <div className="w-50"> */}
+                        <div className="w-100" style={{height:"92vh"}}>
+                        <ProblemSection></ProblemSection>
+                        </div>
+                        {/* <Card>
                         <Card.Header>
                             <Tabs defaultActiveKey="Problem" id="uncontrolled-tab-example">
                                 <Tab eventKey="Problem" title="Problem">
                                 </Tab>
                             </Tabs>
                         </Card.Header>
-                    </Card>
-                </div>
-                <div className="w-50 bg-info">
-                    <AceEditor
-                        width="100%"
-                        placeholder="Placeholder Text"
-                        mode="c_cpp"
-                        theme="monokai"
-                        name="blah2"
-                        // onLoad={this.onLoad}
-                        onChange={this.onChange}
-                        fontSize={16}
-                        showPrintMargin={true}
-                        showGutter={true}
-                        highlightActiveLine={true}
-                        value={``}
-                        setOptions={{
-                            enableBasicAutocompletion: true,
-                            enableLiveAutocompletion: true,
-                            enableSnippets: true,
-                            showLineNumbers: true,
-                            tabSize: 4,
-                        }} />
-                    <textarea id="input" onChange={this.handleTextInput}>
-                    </textarea>
-                    <textarea id="output">
-                    </textarea>
-                    <Button onClick={this.handleSubmit}>Compile</Button>
-                </div>
+                    </Card> */}
+                        {/* </div> */}
+                        <div className="w-100" style={{ height: "92vh" }}>
+                            <Card className="h-100">
+                                <Card.Header>
+                                    <ButtonGroup style={{ float: 'right' }} size="sm">
+                                        <DropdownButton as={ButtonGroup} title="Language" variant="outline-secondary" size="sm">
+                                            <Dropdown.Item eventKey="1">C++</Dropdown.Item>
+                                            <Dropdown.Item eventKey="2">JAVA</Dropdown.Item>
+                                        </DropdownButton>
+                                        <DropdownButton as={ButtonGroup} title="Theme" variant="outline-secondary">
+                                            <Dropdown.Item eventKey="1">Dark</Dropdown.Item>
+                                            <Dropdown.Item eventKey="2">Light</Dropdown.Item>
+                                        </DropdownButton>
+                                    </ButtonGroup>
+                                </Card.Header>
+
+                                <AceEditor
+                                    placeholder="Write your code from here"
+                                    width="100%"
+                                    height="100%"
+                                    mode="c_cpp"
+                                    theme="monokai"
+                                    name="blah2"
+                                    onLoad={this.onLoad}
+                                    onChange={this.onChange}
+                                    fontSize={16}
+                                    showPrintMargin={true}
+                                    showGutter={true}
+                                    highlightActiveLine={true}
+                                    value={this.defaultCPP}
+                                    setOptions={{
+                                        enableBasicAutocompletion: true,
+                                        enableLiveAutocompletion: true,
+                                        enableSnippets: true,
+                                        showLineNumbers: true,
+                                        tabSize: 2,
+                                    }} />
+                                {this.state.isPaneOpen ? <UserGreeting /> : null}
+                                <ButtonGroup>
+                                    <Button variant="outline-info" onClick={() => this.setState({ isPaneOpen: !this.state.isPaneOpen })}>
+                                        console <FaAngleUp />
+                                    </Button>
+                                    <Button variant="secondary" onClick={null}>Run Code</Button>
+                                    <Button>Submit</Button>
+                                </ButtonGroup>
+                            </Card>
+                        </div>
+                    </SplitPane>
+                </Wrapper>
             </div>
         )
     }

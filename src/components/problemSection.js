@@ -61,5 +61,4 @@ function ProblemSection({problemTitle,problemStatement,sampleInput,sampleOutput,
         </div>
     )
 }
-
 export default ProblemSection;

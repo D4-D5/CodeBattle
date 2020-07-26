@@ -23,6 +23,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-sliding-pane": "^6.1.0",
+    "react-split-pane": "^0.1.91",
+    "styled-components": "^5.1.1",
     "uuid": "^8.2.0",
     "yarn": "^1.22.4"
   },
