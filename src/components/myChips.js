@@ -6,21 +6,21 @@ class MyChip extends Component {
  
   constructor(props) {
     super(props);
-    this.state = {
-      chips: []
-    }
+    // this.state = {
+    //   chips: []
+    // }
   }
  
-  onChange = chips => {
-    this.setState({ chips });
-  }
+  // onChange = chips => {
+  //   this.setState({ chips });
+  // }
  
   render() {
     return (
       <div>
         <Chips
-          value={this.state.chips}
-          onChange={this.onChange}
+          value={this.props.chips}
+          onChange={this.props.handleChipsChange}
           suggestions={TAGS}
           placeholder="Enter tags (comma separeted)"
         />
