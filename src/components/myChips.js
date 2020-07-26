@@ -28,5 +28,4 @@ class MyChip extends Component {
     );
   }
 }
-
 export default MyChip;

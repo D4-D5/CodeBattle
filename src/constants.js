@@ -41,3 +41,9 @@ export const TAGS = [
     "chinese remainder theorem",
     "schedules"
 ]
+
+export const DIFFICULTY = {
+    easy:"easy",
+    medium:"medium",
+    hard:"hard"
+}
