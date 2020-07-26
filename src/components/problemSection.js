@@ -5,7 +5,7 @@ function createMarkup(problemStatement) {
     return {__html: problemStatement};
   }
 
-function ProblemSection({problemTitle,problemStatement}) {
+function ProblemSection({problemTitle,problemStatement,sampleInput,sampleOutput,inputSpecification,outputSpecification,ioExplaination}) {
     const [state,setState] = useState(
         {
             problemTitle:"sdbjchb sj",
@@ -25,45 +25,35 @@ function ProblemSection({problemTitle,problemStatement}) {
                     </Tabs>
                 </Card.Header>
                 <Card.Body>
-                    <div>
-                            <div><strong>{problemTitle}</strong></div>
-                            <div dangerouslySetInnerHTML={createMarkup(problemStatement)}>
-                                    {/* <p></p> */}
-                            </div>
-                            <div>
+                    <div className="text-left">
+                            <div className="text-center"><strong>{problemTitle}</strong></div>
+                            <div dangerouslySetInnerHTML={createMarkup(problemStatement)} className=""/>
+                            <div className = "">
                                 <strong>Input</strong>
-                                <div>
-                                <p>{state.inputSpecification}</p>
-                                </div>
+                                <div dangerouslySetInnerHTML={createMarkup(inputSpecification)}/>
                             </div>
-                            <div>
+                            <div className = "">
                                 <strong>Output</strong>
-                                <div>
-                                <p>{state.inputSpecification}</p>
-                                </div>
+                                <div dangerouslySetInnerHTML={createMarkup(outputSpecification)}/>
                             </div>
-                            <div>
-                                <strong>Examples</strong>
-                                <Card>
-                                    <Card.Header>input</Card.Header>
+                            <div className = "">
+                                <strong className="">Examples</strong>
+                                <Card className="">
+                                    <Card.Header className="">input</Card.Header>
                                     <Card.Body>
-                                    6 10 7 1 9 10 15
+                                    {sampleInput}
                                     </Card.Body>
                                 </Card>
                                 <Card>
-                                    <Card.Header>output</Card.Header>
+                                    <Card.Header className="">output</Card.Header>
                                     <Card.Body>
-                                    6 10 7 1 9 10 15
+                                    {sampleOutput}
                                     </Card.Body>
                                 </Card>
                             </div>
-                            <div>
+                            <div className = ""> 
                             <strong>Explaination</strong>
-                                <div>
-                                <p>
-                                    {state.ioExplaination}
-                                </p>
-                                </div>
+                            <div dangerouslySetInnerHTML={createMarkup(ioExplaination)}/>
                             </div>
                     </div>
                 </Card.Body>
