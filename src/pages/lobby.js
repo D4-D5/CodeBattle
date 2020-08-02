@@ -34,7 +34,7 @@ class Lobby extends Component {
     render() {
     const msg = INVITE_MSG+this.state.roomId;
         return (
-            <div className="row bg-dark d-flex align-items-center justify-content-around" style={{ height: "92vh" }}>
+            <div className="row bg-light d-flex align-items-center justify-content-around" style={{ height: "92vh" }}>
                 <Card style={{ width: "50%",minHeight:"300px", }}>
                     <Card.Header><strong>Participants</strong></Card.Header>
                     <Card.Body>

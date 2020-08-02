@@ -1,0 +1,27 @@
+.navbar-brand {
+    font-size: 1.45rem;
+    font-weight: 300;
+}
+.nav-link {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    background: linear-gradient(to right, white, white 50%,  rgba(255,255,255,0.5) 50%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 100%;
+    background-position: 100%;
+    transition: background-position 275ms ease;
+}
+.nav-link:hover {
+    background-position: 0 100%;
+}
+
+
+/* ----------for screen size 15.6 inch---------- */
+@media (min-width: 1400px){
+    .container{
+        max-width: 1370px;
+      }
+    }
