@@ -1,0 +1,53 @@
+@media (min-width: 576px){
+    .modal-dialog {
+      max-width: 700px;
+    }
+  }
+  @media (max-width: 575px){
+    .modal_image img{
+      display: none;
+    }
+  }
+  .modal{
+    font-family: nunito;
+  }
+  .modal-title p{
+    font-size: 1rem;
+    padding-top: 10px;
+  }
+  .login_img{
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+  }
+  #formEmail, #formPassword, #formUsername, #formName, #formNumber, #formId, #formCheckbox{
+    border-color: #175c53;
+  }
+  .modal-title{
+    color: #175c53;
+  }
+  .modal button{
+    background: teal;
+    border-color: none;
+    border-radius: 20px;
+  }
+  .modal .btn-primary{
+    border-color: teal;
+  }
+  .modal .btn-primary:focus{
+    background: teal;
+  }
+  .btn:focus{
+    box-shadow: none;
+  }
+  .modal button:hover{
+    background: #175c53;
+  }
+  .modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content{
+    border-radius: 25px;
+    color: #175c53;
+  }

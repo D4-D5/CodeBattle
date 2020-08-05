@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { Card, Tabs, Tab } from 'react-bootstrap'
+import { Card, Tabs, Tab, Button } from 'react-bootstrap'
 
 function createMarkup(problemStatement) {
     return {__html: problemStatement};
@@ -47,6 +47,7 @@ function ProblemSection({problemTitle,problemStatement,sampleInput,sampleOutput,
                                 <Card>
                                     <Card.Header className="">output</Card.Header>
                                     <Card.Body>
+                                        <Button>Hello</Button>
                                     {sampleOutput}
                                     </Card.Body>
                                 </Card>

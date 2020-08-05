@@ -1,0 +1,48 @@
+
+/* .nav_page{
+  /* background-color: brown; */
+/* } */ 
+
+/* -----------slant background---------- */
+   .landing_page{
+     /* background-color: blue; */
+    background: linear-gradient(-150deg, #35424e 15%, #373737 70%, #3c4859 94%);
+  }
+  @media (min-width: 992px){
+    .landing_page {
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(-150deg, #35424e 15%, #373737 70%, #3c4859 94%);
+    }
+  .landing_page:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 95%;
+    background-repeat: no-repeat; 
+    background: #f3f3f5;
+    transform: skew(75deg);
+    transform-origin: bottom;
+  }
+} 
+
+
+/* ----------for screen size 15.6 inch---------- */
+@media (min-width: 1400px){
+  .container{
+      max-width: 1370px;
+    }
+  }
+
+/* --------Navbar--------- */
+
+/* -------Login & SignUp Modal---------- */
+
+/* --------Header-------- */
+ 
+/* -----------Cards----------- */
+ 
+/* ------overlapping of text on hover on image------  */
+ 
