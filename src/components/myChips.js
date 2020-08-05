@@ -19,8 +19,8 @@ class MyChip extends Component {
     return (
       <div>
         <Chips
-          value={this.state.chips}
-          onChange={this.onChange}
+          value={this.props.chips}
+          onChange={this.props.handleChipsChange}
           suggestions={TAGS}
           placeholder="Enter tags (comma separeted)"
         />

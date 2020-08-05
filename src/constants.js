@@ -1,6 +1,12 @@
 //URLS
-export const BASE_ADDRESS = "https://bc20a0a7c4e7.ngrok.io";
+export const BASE_ADDRESS = "https://ee32bb550c52.ngrok.io";
 export const LOBBY_ADDRESS = BASE_ADDRESS+"/lobby";
+export const CREATE_PROBLEM = BASE_ADDRESS+"/api/createProblem";
+export const REGISTER_USER = BASE_ADDRESS+"/api/register";
+export const LOGIN_USER = BASE_ADDRESS+"/api/login";
+export const GET_PROBLEMS = BASE_ADDRESS+"/api/getProblems";
+export const CREATE_LOBBY = BASE_ADDRESS+"/api/createLobby";
+
 //INVITE MSGS
 export const INVITE_MSG = "Hey! your friend has challenged you to fight a CodeBattle.\nClick the link to accept : \n"+LOBBY_ADDRESS+"/";
 
@@ -43,7 +49,7 @@ export const TAGS = [
 ]
 
 export const DIFFICULTY = {
-    easy:"easy",
-    medium:"medium",
-    hard:"hard"
+    easy:"EASY",
+    medium:"MEDIUM",
+    hard:"HARD"
 }

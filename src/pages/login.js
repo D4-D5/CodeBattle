@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import firebase from '../firebase';
 import { Card, Form, InputGroup } from "react-bootstrap";
 import LoginGif from '../assets/login.gif'
+import { LOGIN_USER } from "../constants";
 //import { browserHistory } from "react-router";
 
 
@@ -26,6 +27,7 @@ export default class Login extends Component {
         })
 
         if (this.isDataValid()) {
+            this.sendDataToserver()
         }
         
     }
@@ -68,7 +70,7 @@ export default class Login extends Component {
         //     label_div.removeChild(label_div.childNodes[0]);
         // }
 
-        var targetUrl = 'https://d944618407f7.ngrok.io/api/login'
+        var targetUrl = LOGIN_USER
         var userName = this.state.userName;
         var password = this.state.password;
 
@@ -79,43 +81,60 @@ export default class Login extends Component {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json; charset=utf-8",
-                    'Access-Control-Allow-Origin': '*'
+                    'Access-Control-Allow-Origin': '*',
+                    'Authorization': localStorage.getItem("tokenKey")
                 },
 
 
                 body: JSON.stringify({
-                    "userName": userName,
-                    "password": password,
+                    "codeBattleId": userName.value,
+                    "password": password.value,
                 })
 
             };
-
-
-            fetch(targetUrl, requestOptions).then(async response => {
-                const data = await response.json();
-
-                // check for error response
-                if (!response.ok) {
-
-                    // get error message from body or default to response status
-                    const error = (data && data.message) || response.status;
-                    document.getElementById('error').textContent = data.reason;
-                    console.log(data.reason)
-                    return Promise.reject(error);
-                } else {
-                    localStorage.setItem('loggedIn', true);
-                    this.props.history.push("/home");
+            fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if(result.status=="success"){
+                        localStorage.setItem('loggedIn', true);
+                        localStorage.setItem('codeBattleId', userName.value);
+                        localStorage.setItem('tokenKey', result.message.tokenType+ " "+ result.message.accessToken);
+                        this.props.history.push("/home");
+                    }
+                    //this.props.history.push("/home");
+                    console.log(result);
+                },
+                (error) => {
+                    console.log(error);
                 }
+            )
+
+        //     fetch(targetUrl, requestOptions).then(async response => {
+        //         const data = await response.json();
+
+        //         // check for error response
+        //         if (!response.ok) {
+
+        //             // get error message from body or default to response status
+        //             const error = (data && data.message) || response.status;
+        //             //document.getElementById('error').textContent = data.reason;
+        //             console.log(data.reason)
+        //             return Promise.reject(error);
+        //         } else {
+        //             localStorage.setItem('loggedIn', true);
+        //             this.props.history.push("/home");
+        //         }
 
 
-                // this.setState({ postId: data.id })
-            })
-                .catch(error => {
-                    //this.setState({ errorMessage: error.toString() });
-                    console.error('There was an error!', error.toString()
-                    );
-                });
-        //}
+        //         // this.setState({ postId: data.id })
+        //     })
+        //         .catch(error => {
+        //             //this.setState({ errorMessage: error.toString() });
+        //             console.error('There was an error!', error.toString()
+        //             );
+        //         });
+        // //}
     }
 
     render() {

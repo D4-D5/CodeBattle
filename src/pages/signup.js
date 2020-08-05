@@ -1,7 +1,7 @@
 import React, { Component, isValidElement } from "react";
 import firebase from '../firebase';
 import { Container, Row, Form, Col, InputGroup, Button, Card } from "react-bootstrap";
-
+import { REGISTER_USER } from '../constants';
 // function isDataValid(name, userName, email, password, phoneNumber, codeforcesId, haveCodeforces) {
 //     var status = true
 //     var error = "Unknown Error"
@@ -58,11 +58,8 @@ export default class SignUp extends Component {
         this.setState({
             validated: true
         })
-        if (this.isDataValid() === false) {
-
-        }
-        else {
-
+        if (this.isDataValid()) {
+            this.sendDataToserver();
         }
         // if (form.checkValidity() === false || this.isDataValid() === false) {
         // e.stopPropagation();
@@ -186,71 +183,54 @@ export default class SignUp extends Component {
 
 
     sendDataToserver() {
-        document.getElementById('error').textContent = "";
-        var targetUrl = 'https://d944618407f7.ngrok.io/api/register'
+        //document.getElementById('error').textContent = "";
+        var targetUrl = REGISTER_USER
         const { name, userName, email, password, phoneNumber, codeforcesId, haveCodeforces } = this.state;
-        // var name = document.getElementById('name').value
-        // var userName = document.getElementById('user-name').value
-        // var email = document.getElementById('email').value
-        // var password = document.getElementById('password').value
-        // var phoneNumber = document.getElementById('phone-number').value
-        // var codeforcesId = document.getElementById('codeforces-id').value
-        // var haveCodeforces = document.getElementById('haveCodeforces').checked
-
-        // alert(haveCodeforces);
-        // if (isDataValid(name, userName, email, password, phoneNumber, codeforcesId, haveCodeforces)) {
+        
+        //console.log(name)
         const requestOptions = {
             method: 'POST',
             headers: {
                 'Content-Type': "application/json; charset=utf-8",
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': localStorage.getItem("tokenKey")
             },
 
 
             body: JSON.stringify({
-                "name": name,
-                "userName": userName,
-                "email": email,
-                "password": password,
+                "name": name.value,
+                "codeBattleId": userName.value,
+                "email": email.value,
+                "password": password.value,
                 "countryCode": '+91',
-                "phoneNumber": phoneNumber,
-                "codeforcesId": codeforcesId
+                "phoneNumber": phoneNumber.value,
+                "codeforcesId": codeforcesId.value,
+                "userRole":"PARTICIPANT"
 
             })
 
         };
-
-
-        fetch(targetUrl, requestOptions).then(async response => {
-            const data = await response.json();
-
-            // check for error response
-            if (!response.ok) {
-
-                // get error message from body or default to response status
-                const error = (data && data.message) || response.status;
-                document.getElementById('error').textContent = data.reason;
-                console.log(data.reason)
-                return Promise.reject(error);
-            } else {
-                this.props.history.push("/home");
+        fetch(targetUrl, requestOptions)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                if(result.status=="success"){
+                    localStorage.setItem('loggedIn', true);
+                    localStorage.setItem('codeBattleId', userName.value);
+                    this.props.history.push("/home");
+                }
+                console.log(result);
+            },
+            (error) => {
+                console.log(error);
             }
-
-
-            // this.setState({ postId: data.id })
-        })
-            .catch(error => {
-                //this.setState({ errorMessage: error.toString() });
-                console.error('There was an error!', error.toString()
-                );
-            });
-        // }
+        )
     }
     render() {
         const { name, userName, email, password, codeforcesId, phoneNumber, haveCodeforces, validated } = this.state;
         // const xyz=true;
-        console.log(codeforcesId);
-        console.log(haveCodeforces);
+        //console.log(codeforcesId);
+        //console.log(haveCodeforces);
         // console.log("final ",this.state.validated?!name.errorState:null);
         return (
             <div className=" bg-dark d-flex align-items-center justify-content-center" style={{ height: "92vh", minHeight: "450px" }}>

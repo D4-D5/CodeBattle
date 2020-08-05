@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Form, Col, Button, Card, Tabs, Tab, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Form, Col, Button, Card, Tabs, Tab, OverlayTrigger, Tooltip, ListGroup, Row } from 'react-bootstrap'
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import { BsFillQuestionDiamondFill } from "react-icons/bs";
 import ProblemSection from '../components/problemSection';
 import CKEditor from 'ckeditor4-react';
 import MyChip from '../components/myChips'
 import SlidingPane from "react-sliding-pane";
-import { DIFFICULTY } from '../constants';
+import { DIFFICULTY, CREATE_PROBLEM, GET_PROBLEMS } from '../constants';
+import { Link } from 'react-router-dom';
 
 class CreateProblem extends Component {
     state = {
@@ -21,7 +22,17 @@ class CreateProblem extends Component {
         idealSolution: "",
         inputSpecification: "",
         outputSpecification: "",
-        ioExplaination: ""
+        ioExplaination: "",
+        timeLimit: 0,
+        memoryLimit: 0,
+        maxCodeSize: 0,
+        fileSampleInput: null,
+        fileSampleOutput: null,
+        fileIdealSolution: null,
+        fileInputTestCase: null,
+        fileOutputTestCase: null,
+        problems: []
+
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -34,20 +45,30 @@ class CreateProblem extends Component {
         this.setState({
             [e.target.id]: e.target.value
         })
-        console.log(this.state.difficultyLevel);
+        //console.log(this.state.difficultyLevel);
     }
 
-    // handleProblemStatementChange = (evt) => {
-    //     this.setState({
-    //         problemStatement: evt.editor.getData()
-    //     });
-    // }
+    isDataValid = () => {
+        const {
+            fileSampleInput,
+            fileSampleOutput,
+            fileIdealSolution,
+            fileInputTestCase,
+            fileOutputTestCase,
+            problemTitle,
+            problemStatement,
+            difficultyLevel,
+            chips,
+            inputSpecification,
+            outputSpecification,
+            ioExplaination,
+            timeLimit,
+            memoryLimit,
+            maxCodeSize } = this.state;
 
-    // handleExplainationChange = (evt) => {
-    //     this.setState({
-    //         sampleExplanation: evt.editor.getData()
-    //     });
-    // }
+        return true;
+    }
+
 
     onRequestClose = () => {
         this.setState({
@@ -57,9 +78,14 @@ class CreateProblem extends Component {
 
     handleChipsChange = chips => {
         this.setState({ chips });
+        console.log(chips)
+        console.log(this.state.chips)
     }
 
-    showFile = async (e, id) => {
+    showFile = async (e, id, fileId) => {
+        this.setState({
+            [fileId]: e.target.files
+        })
         e.preventDefault()
         const reader = new FileReader()
         reader.onload = async (e) => {
@@ -74,34 +100,169 @@ class CreateProblem extends Component {
     }
 
     handleEditorChange = (e, editor_id) => {
-        this.setState({
-            [editor_id]: e.editor.getData()
-        });
+        try {
+            this.setState({
+                [editor_id]: e.editor.getData()
+            });
+        } catch (e) {
+
+        }
     }
 
 
+    editProblem = (problem) => {
+        this.setState({problemTitle:problem.problemTitle})
+        this.setState({ difficultyLevel:problem.difficultyLevel})
+        this.setState({ fileIdealSolution:problem.fileIdealSolution})
+        this.setState({ fileInputTestCase:problem.fileInputTestCase})
+        this.setState({ fileOutputTestCase:problem.fileOutputTestCase})
+        this.setState({ fileSampleInput:problem.fileSampleInput})
+        this.setState({ fileSampleOutput:problem.fileSampleOutput})
+        this.setState({ fileSampleOutput:problem.fileSampleOutput})
+        this.setState({ inputSpecification:problem.inputSpecification})
+        this.setState({ ioExplanation:problem.ioExplanation})
+        this.setState({ maxCodeSize:problem.maxCodeSize})
+        this.setState({ memoryLimit:problem.memoryLimit})
+        this.setState({ outputSpecification:problem.outputSpecification})
+        this.setState({ problemStatement:problem.problemStatement})
+        this.setState({ problemStatement:problem.problemStatement})
+        this.setState({ timeLimit:problem.timeLimit})
+        this.setState({ chips:problem.tags})
+    }
 
+    sendDataToserver = (e) => {
+        console.log("clicked")
+        e.preventDefault();
+        this.setState({
+            validated: true
+        })
+        //document.getElementById('error').textContent = "";
+        var targetUrl = CREATE_PROBLEM
+        const {
+            fileSampleInput,
+            fileSampleOutput,
+            fileIdealSolution,
+            fileInputTestCase,
+            fileOutputTestCase,
+            problemTitle,
+            problemStatement,
+            difficultyLevel,
+            chips,
+            inputSpecification,
+            outputSpecification,
+            ioExplaination,
+            timeLimit,
+            memoryLimit,
+            maxCodeSize } = this.state;
+
+        console.log(chips)
+        //  if (true) {
+
+
+
+        const formData = new FormData()
+        formData.append("fileSampleInput", fileSampleInput[0])
+        formData.append("fileSampleOutput", fileSampleOutput[0])
+        formData.append("fileIdealSolution", fileIdealSolution[0])
+        formData.append("fileInputTestCase", fileInputTestCase[0])
+        formData.append("fileOutputTestCase", fileOutputTestCase[0])
+        formData.append("problemTitle", problemTitle)
+        formData.append("problemStatement", problemStatement)
+        formData.append("difficultyLevel", difficultyLevel)
+        formData.append("tags", chips)
+        formData.append("inputSpecification", inputSpecification)
+        formData.append("outputSpecification", outputSpecification)
+        formData.append("ioExplaination", ioExplaination)
+        formData.append("timeLimit", timeLimit)
+        formData.append("memoryLimit", memoryLimit)
+        formData.append("maxCodeSize", maxCodeSize)
+        formData.append("authorId", localStorage.getItem("codeBattleId"))
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                //'Content-Type': "multipart/form-data",
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': localStorage.getItem("tokenKey")
+            },
+
+
+            body: formData
+
+        };
+
+
+        fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    if (result.status == "success") {
+                        this.setState({ isPaneOpen: false })
+                    }
+                    console.log(result);
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
+
+    componentWillMount() {
+        //document.getElementById('error').textContent = "";
+        var targetUrl = GET_PROBLEMS
+
+        const formData = new FormData()
+        formData.append("authorId", localStorage.getItem("codeBattleId"))
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                //'Content-Type': "multipart/form-data",
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': localStorage.getItem("tokenKey")
+            },
+
+
+            body: formData
+
+        };
+
+
+        fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({ problems: result.message })
+                    console.log(result);
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
 
 
     render() {
-        
-        const { validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
+
+        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
+
+        console.log(chips)
         const tooltipSolutionDetails = (props) => (
             <Tooltip id="button-tooltip" {...props}>
-              The sample input and output must be uploaded in the format of .txt files up to the size of 5 MB.
+                The sample input and output must be uploaded in the format of .txt files up to the size of 5 MB.
             </Tooltip>
-          );
-          const tooltipIdealSolution = (props) => (
+        );
+        const tooltipIdealSolution = (props) => (
             <Tooltip id="button-tooltip" {...props}>
-              The maximum size of the ideal solution file must be atmost 1 MB and with proper language extensions(.cpp, .py, etc).
+                The maximum size of the ideal solution file must be atmost 1 MB and with proper language extensions(.cpp, .py, etc).
             </Tooltip>
-          );
+        );
 
-          const tooltipLimits = (props) => (
+        const tooltipLimits = (props) => (
             <Tooltip id="button-tooltip" {...props}>
-              Defines the maximum limits for each test case execution to be completed
+                Defines the maximum limits for each test case execution to be completed
             </Tooltip>
-          );
+        );
         console.log(sampleInput);
         console.log(sampleOutput);
         return (
@@ -111,6 +272,45 @@ class CreateProblem extends Component {
                     <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>
                         Create a new Problem
                     </Button>
+                    <div className="text-left container">
+                        <ListGroup>
+                            {problems &&
+                                problems.map((problem, index) => {
+                                    const cleanedDate = new Date(problem.title).toDateString();
+                                    return (
+                                        <ListGroup.Item>
+                                            <Row className="d-flex">
+                                                <div className="pr-4">
+                                                    <p >
+                                                        {problem.id}
+                                                    </p>
+                                                </div>
+
+                                                <div className="flex-grow-1">
+                                                    <Link>
+                                                        {problem.problemTitle}
+                                                    </Link>
+                                                </div>
+
+
+                                                <div className="pl-4">
+                                                    <Button onClick={(e) => this.editProblem(problems[index])}>
+                                                        Edit
+                                                    </Button>
+                                                </div>
+
+                                                <div className="pl-4">
+                                                    <Button disabled={(problem.problemStatus == "PUBLISHED") ? true : null} >
+
+                                                        {(problem.problemStatus == "PUBLISHED") ? "Already Published" : "Submit For Review"}
+                                                    </Button>
+                                                </div>
+                                            </Row>
+                                        </ListGroup.Item>
+                                    );
+                                })}
+                        </ListGroup>
+                    </div>
                     <SlidingPane
                         className="some-custom-class"
                         overlayClassName="some-custom-overlay-class"
@@ -137,9 +337,9 @@ class CreateProblem extends Component {
                                 </Form.Group>
                                 <Form.Group>
                                     <strong>Difficulty level</strong><br />
-                                    <Form.Check id="difficultyLevel" inline label="Easy" type="radio" name="diff" value={DIFFICULTY.easy} onChange={this.handleTextChange} />
-                                    <Form.Check id="difficultyLevel" inline label="Medium" type="radio" name="diff" value={DIFFICULTY.medium} onChange={this.handleTextChange} />
-                                    <Form.Check id="difficultyLevel" inline label="Hard" type="radio" name="diff" value={DIFFICULTY.hard} onChange={this.handleTextChange} />
+                                    <Form.Check id="difficultyLevel" inline label="Easy" type="radio" value={DIFFICULTY.easy} onChange={this.handleTextChange} />
+                                    <Form.Check id="difficultyLevel" inline label="Medium" type="radio" value={DIFFICULTY.medium} onChange={this.handleTextChange} />
+                                    <Form.Check id="difficultyLevel" inline label="Hard" type="radio" value={DIFFICULTY.hard} onChange={this.handleTextChange} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Tags</Form.Label>
@@ -160,20 +360,20 @@ class CreateProblem extends Component {
                                             id="sampleInput"
                                             label="Sample Input File"
                                             accept=".txt"
-                                            onChange={(e) => this.showFile(e, "sampleInput")}
+                                            onChange={(e) => this.showFile(e, "sampleInput", "fileSampleInput")}
                                         />
                                         <Form.File
                                             id="sampleOutput"
                                             required
                                             label="Sample Output File"
                                             accept=".txt"
-                                            onChange={(e) => this.showFile(e, "sampleOutput")}
+                                            onChange={(e) => this.showFile(e, "sampleOutput", "fileSampleOutput")}
                                         />
                                     </Form.Row>
                                 </Form.Group>
 
                                 <Form.Group controlId="">
-                                    <Form.Label>Input Specification</Form.Label>
+                                    <Form.Label><strong>Input Specification</strong></Form.Label>
                                     <CKEditor
                                         data={this.state.inputSpecification}
                                         onChange={(e) => this.handleEditorChange(e, "inputSpecification")}
@@ -199,7 +399,7 @@ class CreateProblem extends Component {
                                     </OverlayTrigger>
                                     <Form.File
                                         accept=".txt"
-                                        onChange={(e) => this.showFile(e, "idealSolution")}
+                                        onChange={(e) => this.showFile(e, "idealSolution", "fileIdealSolution")}
                                     />
                                 </Form.Group>
                                 <Form.Group controlId="">
@@ -217,16 +417,18 @@ class CreateProblem extends Component {
                                             required
                                             label="Input File"
                                             accept=".txt"
+                                            onChange={(e) => this.showFile(e, "outputTestCase", "fileInputTestCase")}
                                         />
                                         <Form.File
                                             required
                                             label="Output File"
                                             accept=".txt"
+                                            onChange={(e) => this.showFile(e, "inputTestCase", "fileOutputTestCase")}
                                         />
                                     </Form.Row>
                                 </Form.Group>
                                 <Form.Group>
-                                <OverlayTrigger
+                                    <OverlayTrigger
                                         placement="right"
                                         delay={{ show: 250, hide: 400 }}
                                         overlay={tooltipLimits}>
@@ -237,23 +439,24 @@ class CreateProblem extends Component {
                                     <Form.Row>
                                         <Col>
                                             <Form.Label>Time limit (sec)</Form.Label>
-                                            <Form.Control placeholder="" value="5" required />
+                                            <Form.Control id="timeLimit" placeholder="" value={this.state.timeLimit} required onChange={this.handleTextChange} />
                                         </Col>
                                         <Col>
                                             <Form.Label>Memory limit (MB)</Form.Label>
-                                            <Form.Control placeholder="" value="256" required />
+                                            <Form.Control id="memoryLimit" placeholder="" value={this.state.memoryLimit} required onChange={this.handleTextChange} />
                                         </Col>
                                         <Col>
                                             <Form.Label>Maximum size code (KB)</Form.Label>
-                                            <Form.Control placeholder="" value="1024" required />
+                                            <Form.Control id="maxCodeSize" placeholder="" value={this.state.maxCodeSize} required onChange={this.handleTextChange} />
                                         </Col>
                                     </Form.Row>
                                 </Form.Group>
-                                <Button onClick={this.handleSubmit}>Save</Button>
+                                <Button onClick={this.sendDataToserver}>Save</Button>
                             </Form>
                         </div>
                     </SlidingPane>
                 </div>
+
             </div>
         )
     }
