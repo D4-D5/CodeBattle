@@ -1,39 +1,12 @@
 import React, { Component, isValidElement } from "react";
-import firebase from '../firebase';
+import firebase from '../firebase.js';
 import { Container, Row, Form, Col, InputGroup, Button, Card } from "react-bootstrap";
 import { REGISTER_USER } from '../constants';
-// function isDataValid(name, userName, email, password, phoneNumber, codeforcesId, haveCodeforces) {
-//     var status = true
-//     var error = "Unknown Error"
-//     if (name == "") {
-//         error = "Name can't be blank"
-//         status = false;
-//     } else if (userName == "") {
-//         error = "User name can't be blank"
-//         status = false;
-//     } else if (codeforcesId == "" && !haveCodeforces) {
-//         error = "CodeforcesId can't be blank"
-//         status = false;
-//     } else if (phoneNumber.length < 10) {
-//         error = "Incorrect phone number"
-//         status = false;
-//     }
-//     else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-//         error = "Incorrect Email"
-//         status = false;
-//     } else if (password.length < 8) {
-//         error = "Password must be 8 digits long"
-//         status = false;
-//     }
-//     if (!status) {
-//         document.getElementById('error').textContent = error
-//     }
-//     return status
-// }
+
 
 
 export default class SignUp extends Component {
-    // const [validated, setValidated] = useState(false);
+    
     formDefault = {
         name: { value: "", errorMsg: "", errorState: null },
         userName: { value: "", errorMsg: "", errorState: null },
@@ -61,18 +34,6 @@ export default class SignUp extends Component {
         if (this.isDataValid()) {
             this.sendDataToserver();
         }
-        // if (form.checkValidity() === false || this.isDataValid() === false) {
-        // e.stopPropagation();
-
-        // }
-        // else {
-        //     this.sendDataToserver();
-        // }
-
-
-        // const from
-        // e.preventDefault();
-        // this.sendDataToserver();
 
     }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import image1 from '../assets/images/compete-friends-new-01-01.svg'
 import image2 from '../assets/images/stanger-vs-01-01-01-01.svg'
@@ -8,15 +8,27 @@ import HomeMainCard from './homeMainCard.js';
 import {useHistory} from 'react-router-dom'
 import '../css/homeCards.css'
 
+import JoinContestPopup from './joinOrCreatePopup';
+
 const { v4: uuidv4 } = require('uuid');
 
 
 function HomeCards() { 
+
   const history = useHistory();
+  const [showJoinContest, setShowJoinContest] = useState(false);
+  const handleShowJoinContest = () => setShowJoinContest(true);
+  const handleHideJoinContest = () => setShowJoinContest(false);
+  const createContest = () => {
+    setShowJoinContest(true);
+  
+  }
+
   const routeChange = () => {
-    let path = "\lobby";
-    var roomID = "/" + uuidv4();
-    history.push(path + roomID);
+
+    createContest()
+    
+    
 }
     return (
       <div class="container cards">
@@ -36,7 +48,9 @@ function HomeCards() {
           <div class="col-lg-3 col-md-6 col-12 mb-3">
             <HomeMainCard img={image2} title={"Rated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Compete with Others"} disabled={false} routeChange={routeChange}/>
           </div>
-        </div>       
+        </div> 
+
+        <JoinContestPopup showJoinContest={showJoinContest} handleShowJoinContest={handleShowJoinContest} handleHideJoinContest={handleHideJoinContest}/>
       </div>
 
     );

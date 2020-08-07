@@ -1,18 +1,127 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import image from '../assets/images/abc.svg';
-import { Form, Button, Modal, Row, Col } from 'react-bootstrap';
+import { Form, Button, Modal, Row, Col, InputGroup } from 'react-bootstrap';
 import '../css/modal.css'
+import { LOGIN_USER } from "../constants";
+import { Route , withRouter} from 'react-router-dom';
 
 class Login extends Component {
- 
+
+  formDefault = {
+    userName: { value: "", errorMsg: "", errorState: null },
+    password: { value: "", errorMsg: "", errorState: null },
+    validated: false
+  }
+
+  state = { ...this.formDefault }
+
   hideAndShowSignup = () => {
     this.props.handleCloseLogin();
     this.props.handleShowSignup();
   }
+
+
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    this.setState({
+      validated: true
+    })
+
+    if (this.isDataValid()) {
+      this.sendDataToserver()
+    }
+
+  }
+
+  isDataValid() {
+  
+    const userName = { ...this.state.userName };
+    const password = { ...this.state.password };
+
+    if (userName.value == "") {
+      userName.errorMsg = "User name can't be blank"
+      userName.errorState = false;
+    } else {
+      userName.errorState = true;
+    }
+    if (password.value == "") {
+      password.errorMsg = "Password can't be blank"
+      password.errorState = false;
+    } else {
+      password.errorState = true;
+    }
+    this.setState({
+      userName: userName,
+      password: password
+    })
+
+    return userName.errorState || password.errorState
+  }
+
+  sendDataToserver() {
+    // var label_div = document.getElementById('error-div');
+    // if (label_div.hasChildNodes()) {
+    //     label_div.removeChild(label_div.childNodes[0]);
+    // }
+
+    var targetUrl = LOGIN_USER
+    var userName = this.state.userName;
+    var password = this.state.password;
+
+
+    // alert(haveCodeforces);
+    //if (this.isDataValid()) {
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json; charset=utf-8",
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': localStorage.getItem("tokenKey")
+      },
+
+
+      body: JSON.stringify({
+        "codeBattleId": userName.value,
+        "password": password.value,
+      })
+
+    };
+    fetch(targetUrl, requestOptions)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          if (result.status == "success") {
+            localStorage.setItem('loggedIn', true);
+            localStorage.setItem('codeBattleId', userName.value);
+            localStorage.setItem('tokenKey', result.message.tokenType + " " + result.message.accessToken);
+            //this.props.history.push("/home");
+            this.props.handleCloseLogin();
+          }
+          //this.props.history.push("/home");
+          console.log(result);
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+
+
+  }
+  handleTextChange = (e) => {  
+    this.setState({
+        [e.target.id]: { ...this.state[e.target.id], value: e.target.value }
+    })
+    
+}
+
+
   render() {
-    const {handleCloseLogin,handleShowSignup,showLogin} = this.props
-   
+    const { userName, password, validated } = this.state;
+    const { handleCloseLogin, handleShowSignup, showLogin } = this.props
+
     return (
       <Modal show={showLogin} onHide={handleCloseLogin} centered>
         <Row className="login">
@@ -26,21 +135,48 @@ class Login extends Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className="pb-0">
-              <Form>
-                <Form.Group controlId="formEmail" className="input">
-                  <Form.Control type="email" placeholder="email@example.com" />
+
+              <Form noValidate validated={false}>
+                <Form.Group controlId="validationCustomUsername" className="input">
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+
+                      onChange={this.handleTextChange}
+                      isValid={validated ? userName.errorState : null}
+                      isInvalid={validated ? !userName.errorState : null}
+                      id="userName"
+                      type="text"
+                      placeholder="Username"
+                      aria-describedby="inputGroupPrepend"
+                    />
+
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">
+                      {userName.errorMsg}
+                    </Form.Control.Feedback>
+                  </InputGroup>
                 </Form.Group>
 
-                <Form.Group controlId="formPassword" className="input">
-                  <Form.Control type="password" placeholder="Password" />
-                  <Form.Text className="text-muted d-flex justify-content-end">
-                    Forgot Password
-                  </Form.Text>
+                <Form.Group controlId="formBasicPassword" className="input">
+                  <Form.Control type="password" placeholder="Password"
+                    id="password"
+                    onChange={this.handleTextChange}
+                    isValid={validated ? password.errorState : null}
+                    isInvalid={validated ? !password.errorState : null} />
+                  <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">
+                    {password.errorMsg}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Form>
+
+
             </Modal.Body>
             <div className="justify-content-center text-center mb-2">
-              <Button variant="primary" onClick={handleCloseLogin} type="submit">
+              <Button variant="primary" type="submit" onClick={this.handleSubmit}>
                 Login
               </Button>
               <p className="my-2 justify-content-end">Don't have an account?
@@ -55,4 +191,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

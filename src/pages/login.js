@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import firebase from '../firebase';
+
 import { Card, Form, InputGroup } from "react-bootstrap";
 import LoginGif from '../assets/login.gif'
 import { LOGIN_USER } from "../constants";
@@ -110,31 +110,7 @@ export default class Login extends Component {
                 }
             )
 
-        //     fetch(targetUrl, requestOptions).then(async response => {
-        //         const data = await response.json();
-
-        //         // check for error response
-        //         if (!response.ok) {
-
-        //             // get error message from body or default to response status
-        //             const error = (data && data.message) || response.status;
-        //             //document.getElementById('error').textContent = data.reason;
-        //             console.log(data.reason)
-        //             return Promise.reject(error);
-        //         } else {
-        //             localStorage.setItem('loggedIn', true);
-        //             this.props.history.push("/home");
-        //         }
-
-
-        //         // this.setState({ postId: data.id })
-        //     })
-        //         .catch(error => {
-        //             //this.setState({ errorMessage: error.toString() });
-        //             console.error('There was an error!', error.toString()
-        //             );
-        //         });
-        // //}
+        
     }
 
     render() {

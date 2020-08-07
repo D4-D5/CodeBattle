@@ -276,7 +276,6 @@ class CreateProblem extends Component {
                         <ListGroup>
                             {problems &&
                                 problems.map((problem, index) => {
-                                    const cleanedDate = new Date(problem.title).toDateString();
                                     return (
                                         <ListGroup.Item>
                                             <Row className="d-flex">

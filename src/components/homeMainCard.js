@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button, Card} from 'react-bootstrap';
 // import '../css/cards.css'
 
+
 function MainCard(props) {
     const { img, title, content, btnState,disabled  ,routeChange} = props;
     return (  

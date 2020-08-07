@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/header.css'
 
 function HomeHeader() {
-    return (      
+  return (
     <div class="container mainHeader">
       <div class="header text-white">
         <h1 className="pb-2">A New Way To Learn And Earn</h1>
@@ -13,5 +13,5 @@ function HomeHeader() {
     </div>
   );
 }
-  
+
 export default HomeHeader;
