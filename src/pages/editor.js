@@ -4,10 +4,11 @@ import { Base64 } from 'js-base64'
 import { FaAngleUp } from 'react-icons/fa';
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-monokai";
-import { Button, Card, Tabs, Tab, ButtonGroup, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Button, Card, Tabs, Tab, ButtonGroup, DropdownButton, Dropdown, Spinner } from 'react-bootstrap';
 import ProblemSection from '../components/problemSection';
 import SplitPane from 'react-split-pane';
 import styled from "styled-components";
+import { GET_CONTEST_QUESTIONS} from '../constants';
 
 var recur_cnt = 0;
 
@@ -62,6 +63,7 @@ const Wrapper = styled.div`
     background-color: red;
   } */}
 `;
+
 
 function getASubmission(token) {
     // const code = this.state.code
@@ -144,9 +146,14 @@ function UserGreeting(props) {
 
 
 class Editor extends Component {
+
+
     state = {
         code: "",
-        input: ""
+        input: "",
+        roomId:"",
+        questions:[],
+        status:"IDLE"
     }
     defaultCPP = '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}';
     onChange = (newValue) => {
@@ -167,6 +174,49 @@ class Editor extends Component {
         recur_cnt = 0;
         this.sendDataToServer();
 
+    }
+
+    getContestQuestions = (roomId) =>{
+        var targetUrl = GET_CONTEST_QUESTIONS
+        var data = JSON.stringify({
+            "roomId": roomId,
+            "codeBattleId": localStorage.getItem("codeBattleId")
+        });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': "application/json; charset=utf-8",
+                'Authorization': localStorage.getItem("tokenKey")
+            },
+            body: data
+        };
+
+        fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                    if(result.status=="success"){
+                        this.setState({
+                            questions:result.message,
+                            status:"DONE"
+                        })
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
+    
+    componentWillMount() {
+        let roomId = this.props.match.params.room_id;
+        this.setState({
+            roomId: roomId
+        });
+        this.getContestQuestions(roomId)
     }
 
 
@@ -207,24 +257,21 @@ class Editor extends Component {
             )
     }
     render() {
+        const {questions,status} = this.state;
+        // console.log(questions[0]);
         return (
+            
             <div className="row">
 
                 <Wrapper>
                     <SplitPane split="vertical" defaultSize="50%" minSize="300">
-                        {/* <div className="w-50"> */}
+                        
                         <div className="w-100" style={{height:"92vh"}}>
-                        <ProblemSection></ProblemSection>
+
+                        {status==="DONE"?<ProblemSection questions={questions}/>:<Spinner animation="border" />}
+
                         </div>
-                        {/* <Card>
-                        <Card.Header>
-                            <Tabs defaultActiveKey="Problem" id="uncontrolled-tab-example">
-                                <Tab eventKey="Problem" title="Problem">
-                                </Tab>
-                            </Tabs>
-                        </Card.Header>
-                    </Card> */}
-                        {/* </div> */}
+                        
                         <div className="w-100" style={{ height: "92vh" }}>
                             <Card className="h-100">
                                 <Card.Header>

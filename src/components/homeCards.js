@@ -31,7 +31,7 @@ function HomeCards() {
     
 }
     return (
-      <div class="container cards">
+      <div class="container homeCards">
         <div class="row mt-5">
           <div class="col-lg-3 col-md-6 col-12 mb-3">
             <HomeMainCard img={image3} title={"Unrated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Practice with Friends"} disabled={false} routeChange={routeChange}/>

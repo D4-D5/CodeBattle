@@ -1,10 +1,10 @@
-.cards .card{
+.homeCards .card{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
     border: white;
     border-top-left-radius: 25px;
     border-bottom-right-radius: 25px;
   }
-  .cards button{
+  .homeCards button{
     width: 100%;
     color: white;
     font-size: 1.2rem;
@@ -13,10 +13,10 @@
     border-radius: inherit;
     border-bottom-right-radius: 23px;
   }
-  .cards .card button:hover{
+  .homeCards .card button:hover{
     background-color: rgb(3, 78, 78);
   }
-  .cards .card button:focus{
+  .homeCards .card button:focus{
     box-shadow: none;
     background: teal;
   }
@@ -29,16 +29,16 @@
     box-shadow: none;
   }
   @media screen and (max-width: 1200px) {
-    .cards button{
+    .homeCards button{
       font-size: 1.1rem;
     }
   }
   @media screen and (max-width: 1000px) {
-    .cards button{
+    .homeCards button{
       font-size: 1.1rem;
     }
   }
-  .cards img{
+  .homeCards img{
     width: 100%;
     border-top-left-radius: 25px;
   }

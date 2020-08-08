@@ -267,13 +267,15 @@ class CreateProblem extends Component {
         console.log(sampleOutput);
         return (
             <div className="row">
+                <div className="w-50">
                 <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} />
+                </div>
                 <div className="w-50">
                     <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>
                         Create a new Problem
                     </Button>
                     <div className="text-left container">
-                        <ListGroup>
+                        <ListGroup style={{ overflow: "scroll", maxHeight: "650px"}}>
                             {problems &&
                                 problems.map((problem, index) => {
                                     return (
