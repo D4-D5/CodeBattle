@@ -58,7 +58,7 @@ class JoinContestPopup extends Component {
         return (
             <div>
                 <Modal show={showJoinContest} onHide={handleHideJoinContest} centered className="joinOrCreatePopup">
-                    <Modal.Header className="justify-content-center border-bottom-0 pb-0">
+                    <Modal.Header className="justify-content-center border-bottom-0 pb-0" closeButton>
                         <Modal.Title className="text-center">Join/Create Contest
                         <p className="text-center">Join or create a new contest to compete.</p>
                         </Modal.Title>

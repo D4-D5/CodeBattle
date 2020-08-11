@@ -129,7 +129,7 @@ class Login extends Component {
             <img src={image} className="img-fluid login_img" alt=""></img>
           </Col>
           <Col sm={6}>
-            <Modal.Header className="justify-content-center border-bottom-0 pb-0">
+            <Modal.Header className="justify-content-center border-bottom-0 pb-0" closeButton>
               <Modal.Title className="text-center">Login
                 <p className="text-center">Join the best coding community</p>
               </Modal.Title>

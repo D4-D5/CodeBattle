@@ -193,7 +193,7 @@ class SignUp extends Component {
                         <img src={image} className="img-fluid" alt=""></img>
                     </Col>
                     <Col sm={6}>
-                        <Modal.Header className="justify-content-center border-bottom-0 text-center pb-0">
+                        <Modal.Header className="justify-content-center border-bottom-0 text-center pb-0" closeButton>
                             <Modal.Title >Sign Up
                             <p className="text-center">Join the best coding community</p>
                             </Modal.Title>

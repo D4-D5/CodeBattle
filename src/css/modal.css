@@ -51,3 +51,12 @@
     border-radius: 25px;
     color: #175c53;
   }
+  .modal .close{
+    background: none;
+  }
+  .modal .close:hover{
+    background: none;
+  }
+  .modal .close:focus{
+    outline: none;
+  }
