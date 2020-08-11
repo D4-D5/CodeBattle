@@ -180,7 +180,7 @@ class Login extends Component {
                 Login
               </Button>
               <p className="my-2 justify-content-end">Don't have an account?
-              <Button className="mb-2" variant="primary" type="submit" onClick={this.hideAndShowSignup}>
+              <Button className="mb-2 ml-2" variant="primary" type="submit" onClick={this.hideAndShowSignup}>
                   Sign Up
               </Button></p>
             </div>

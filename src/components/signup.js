@@ -328,7 +328,7 @@ class SignUp extends Component {
                                 Sign Up
                             </Button>
                             <p className="my-2 justify-content-end">Already have an account?
-                            <Button className="mb-2" variant="primary" type="submit" onClick={this.hideAndShowLogin}>
+                            <Button className="mb-2 ml-2" variant="primary" type="submit" onClick={this.hideAndShowLogin}>
                                     Login
                             </Button>
                             </p>

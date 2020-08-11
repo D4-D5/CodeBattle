@@ -1,0 +1,22 @@
+.primaryBtn:hover{
+    background:  rgb(4, 90, 90);
+    color: white;
+  }
+
+.primaryBtn{
+    background: teal;
+    color: white;
+    border-radius: 1020px;
+}
+.primaryBtn:disabled{
+  background: teal;
+  box-shadow: none;
+}
+.primaryBtn:disabled:hover{
+  background: teal;
+  box-shadow: none;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+}
+

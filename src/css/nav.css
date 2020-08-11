@@ -17,6 +17,11 @@
 .nav-link:hover {
     background-position: 0 100%;
 }
+@media (max-width: 991px){
+    .navbar{
+        background-color: #35424e;
+    }
+}
 
 
 /* ----------for screen size 15.6 inch---------- */
