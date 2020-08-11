@@ -53,10 +53,15 @@
   }
   .modal .close{
     background: none;
+    margin: 0px;
+    padding: 0px;
   }
   .modal .close:hover{
     background: none;
   }
   .modal .close:focus{
     outline: none;
+  }
+  .modal .modal-title{
+    margin: auto;
   }
