@@ -3,12 +3,20 @@ import AceEditor from "react-ace";
 import { Base64 } from 'js-base64'
 import { FaAngleUp } from 'react-icons/fa';
 import "ace-builds/src-noconflict/mode-c_cpp";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-xcode";
+import "ace-builds/src-noconflict/theme-terminal";
 import { Button, Card, Tabs, Tab, ButtonGroup, DropdownButton, Dropdown, Spinner } from 'react-bootstrap';
 import ProblemSection from '../components/problemSection';
 import SplitPane from 'react-split-pane';
 import styled from "styled-components";
-import { GET_CONTEST_QUESTIONS} from '../constants';
+import { GET_CONTEST_QUESTIONS, SUBMIT_PROBLEM, SOCK_JS } from '../constants';
+import SockJsClient from 'react-stomp';
+import Countdown from 'react-countdown';
 
 var recur_cnt = 0;
 
@@ -65,65 +73,11 @@ const Wrapper = styled.div`
 `;
 
 
-function getASubmission(token) {
-    // const code = this.state.code
-    recur_cnt = recur_cnt + 1;
 
-    console.log(token);
-    var targetUrl = "https://judge0.p.rapidapi.com/submissions/" + token + "?base64_encoded=true";
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': "application/json; charset=utf-8",
-            "x-rapidapi-host": "judge0.p.rapidapi.com",
-            "x-rapidapi-key": "b946b6f0e6msh1224e8239afb55ap159f6cjsn00c7abe84edf",
-            "accept": "application/json"
-        },
-    };
-
-
-    fetch(targetUrl, requestOptions)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result);
-                if (result.status.id < 3) {
-                    if (recur_cnt < 10) {
-                        console.log("processing");
-                        setTimeout(() => {
-                            getASubmission(token)
-                        }, 200);
-                    }
-                    else {
-                        console.log("Exceeded -> ", recur_cnt)
-                        recur_cnt = 0;
-                    }
-                }
-                else if (result.status.id === 3) {
-                    var output = result.stdout;
-                    var container = document.getElementById("output");
-                    container.innerHTML = Base64.decode(output);
-                }
-                else if (result.compile_output) {
-                    var output = result.compile_output;
-                    var container = document.getElementById("output");
-                    container.innerHTML = Base64.decode(output);
-                }
-                else {
-                    console.log(result.status.description);
-                }
-            },
-            (error) => {
-                console.log(error);
-            }
-        )
-}
-
-
-function UserGreeting(props) {
+function ProblemConsole({ output }) {
     const [activetab, setActivetab] = useState('result');
     return (
-        <Card style={{ position: 'absolute', bottom: 39, right: 0, left: 40, top: "50%" }}>
+        <Card style={{ position: 'absolute', bottom: 39, right: 1, left: 1, top: "50%", zIndex: "4" }}>
             <Card.Header>
                 <Tabs
                     id="controlled-tab-example"
@@ -138,6 +92,7 @@ function UserGreeting(props) {
             </Card.Header>
             <Card.Body>
                 {activetab === "testcase" ? <div><textarea></textarea></div> : null}
+                {activetab === "result" ? <div>{output}</div> : null}
             </Card.Body>
         </Card>
     );
@@ -149,13 +104,18 @@ class Editor extends Component {
 
 
     state = {
-        code: "",
+        code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}',
         input: "",
-        roomId:"",
-        questions:[],
-        status:"IDLE"
+        roomId: "",
+        questions: [],
+        status: "IDLE",
+        output: "",
+        languageId: "54",
+        theme: "monokai",
+        languageName: "c_cpp",
+        languageTitle: "C++ (GCC 9.2.0)"
     }
-    defaultCPP = '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}';
+    defaultCPP = '';
     onChange = (newValue) => {
         // console.log(newValue);
         this.setState({
@@ -169,14 +129,169 @@ class Editor extends Component {
         })
     }
 
-    handleSubmit = (e) => {
+    hadleCompile = (e) => {
         console.log(this.state.code);
         recur_cnt = 0;
-        this.sendDataToServer();
+        this.setState({ isPaneOpen: !this.state.isPaneOpen })
+        this.createSubmission();
+
+    }
+    hadleSubmit = (e) => {
+        console.log(this.state.code);
+        recur_cnt = 0;
+        this.setState({ isPaneOpen: !this.state.isPaneOpen })
+        this.submitSolutionToServer();
 
     }
 
-    getContestQuestions = (roomId) =>{
+    submitSolutionToServer = (e) => {
+        var targetUrl = SUBMIT_PROBLEM
+
+        var data = JSON.stringify({
+            "problemId": localStorage.getItem("currentQuestionId"),
+            "codeBattleId": localStorage.getItem("codeBattleId"),
+            "sourceCode": this.state.code,
+            "roomId": this.state.roomId,
+            "languageId": this.state.languageId
+        });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': "application/json; charset=utf-8",
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': localStorage.getItem("tokenKey")
+            },
+            body: data
+
+        };
+
+
+        fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                    this.setState({
+                        output: result.message
+                    })
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
+
+    getASubmission = (token) => {
+        // const code = this.state.code
+        recur_cnt = recur_cnt + 1;
+
+        console.log(token);
+        var targetUrl = "https://judge0.p.rapidapi.com/submissions/" + token + "?base64_encoded=true";
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': "application/json; charset=utf-8",
+                "x-rapidapi-host": "judge0.p.rapidapi.com",
+                "x-rapidapi-key": "b946b6f0e6msh1224e8239afb55ap159f6cjsn00c7abe84edf",
+                "accept": "application/json"
+            },
+        };
+
+
+        fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                    if (result.status.id < 3) {
+                        if (recur_cnt < 10) {
+                            console.log("processing");
+                            setTimeout(() => {
+                                this.getASubmission(token)
+                            }, 200);
+                        }
+                        else {
+                            console.log("Exceeded -> ", recur_cnt)
+                            recur_cnt = 0;
+                        }
+                    }
+                    else if (result.status.id === 3) {
+                        var output = result.stdout;
+                        //var container = document.getElementById("output");
+                        //container.innerHTML = Base64.decode(output);
+
+                        this.setState({
+                            output: Base64.decode(output)
+                        })
+                    }
+                    else if (result.compile_output) {
+                        var output = result.compile_output;
+                        //var container = document.getElementById("output");
+                        //container.innerHTML = Base64.decode(output);
+                        this.setState({
+                            output: Base64.decode(output)
+                        })
+                    }
+                    else {
+                        console.log(result.status.description);
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
+
+    onlanguageSelected = (e) => {
+        var l_name = ""
+        if (e == "49" || e == "50" || e == "53" || e == "54") {
+            l_name = "c_cpp"
+        } else if (e == 70 || e == 71) {
+            l_name = "python"
+        } else if (e == 62) {
+            l_name = "java"
+        }
+
+        var lang = ""
+        var d_code = ""
+        if (e == "53") {
+            lang = "C++ (GCC 8.3.0)"
+            d_code = '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}'
+        } else if (e == "54") {
+            lang = "C++ (GCC 9.2.0)"
+            d_code = '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}'
+        } else if (e == "62") {
+            lang = "JAVA"
+            d_code = "class Main  \n{ \n    public static void main (String[] args)  \n    {          \n      System.out.println(\"War Begin!\");\n    } \n}"
+        } else if (e == "70") {
+            lang = "Python (2.7.17)"
+            d_code = "print \"War Begin!\";"
+        } else if (e == "71") {
+            lang = "Python (3.8.1)"
+            d_code = "print(\"War Begin!\");"
+        } else if (e == "49") {
+            lang = "C (GCC 8.3.0)"
+            d_code = "#include<stdio.h>\n\nint main() {\n    printf(\"War Begin!\");\n}"
+        } else if (e == "50") {
+            lang = "C (GCC 9.2.0)"
+            d_code = "#include<stdio.h>\n\nint main() {\n    printf(\"War Begin!\");\n}"
+        }
+
+        this.setState({
+            languageId: e,
+            languageName: l_name,
+            languageTitle: lang,
+            code: d_code
+        })
+    }
+
+    onThemeSelected = (e) => {
+        this.setState({
+            theme: e
+        })
+    }
+    getContestQuestions = (roomId) => {
         var targetUrl = GET_CONTEST_QUESTIONS
         var data = JSON.stringify({
             "roomId": roomId,
@@ -198,10 +313,10 @@ class Editor extends Component {
             .then(
                 (result) => {
                     console.log(result);
-                    if(result.status=="success"){
+                    if (result.status == "success") {
                         this.setState({
-                            questions:result.message,
-                            status:"DONE"
+                            questions: result.message,
+                            status: "DONE"
                         })
                     }
                 },
@@ -210,7 +325,7 @@ class Editor extends Component {
                 }
             )
     }
-    
+
     componentWillMount() {
         let roomId = this.props.match.params.room_id;
         this.setState({
@@ -221,11 +336,11 @@ class Editor extends Component {
 
 
 
-    sendDataToServer = () => {
+    createSubmission = () => {
         const { code, input } = this.state;
         var targetUrl = "https://judge0.p.rapidapi.com/submissions"
         var data = JSON.stringify({
-            "language_id": 54,
+            "language_id": this.state.languageId,
             "source_code": code,
             "stdin": input
         });
@@ -247,7 +362,7 @@ class Editor extends Component {
                 (result) => {
                     console.log(result.token);
                     setTimeout(() => {
-                        getASubmission(result.token)
+                        this.getASubmission(result.token)
                     }, 200);
                     //   getASubmission(result.token);
                 },
@@ -257,32 +372,51 @@ class Editor extends Component {
             )
     }
     render() {
-        const {questions,status} = this.state;
+        const { questions, status, output, code, languageId, theme, languageName, languageTitle, roomID } = this.state;
         // console.log(questions[0]);
         return (
-            
-            <div className="row">
 
+            <div className="row">
+                <SockJsClient url={SOCK_JS} topics={['/topic/' + roomID]}
+                    onMessage={(msg) => {
+                        console.log(msg)
+                        if (msg == "CONTEST_ENDED") {
+                            this.props.history.push("/home");
+                        }
+                    }}
+                    ref={(client) => { this.clientRef = client }}
+                    onConnect={(e) => {
+                        console.log("Connected");
+                    }}
+                />
                 <Wrapper>
                     <SplitPane split="vertical" defaultSize="50%" minSize="300">
-                        
-                        <div className="w-100" style={{height:"92vh"}}>
 
-                        {status==="DONE"?<ProblemSection questions={questions}/>:<Spinner animation="border" />}
+                        <div className="w-100" style={{ height: "100vh" }}>
+
+                            {status === "DONE" ? <ProblemSection questions={questions} /> : <Spinner animation="border" />}
 
                         </div>
-                        
-                        <div className="w-100" style={{ height: "92vh" }}>
+
+                        <div className="w-100" style={{ height: "100vh" }}>
                             <Card className="h-100">
                                 <Card.Header>
+                                    <Countdown date={Date.now() + 2700000} />
                                     <ButtonGroup style={{ float: 'right' }} size="sm">
-                                        <DropdownButton as={ButtonGroup} title="Language" variant="outline-secondary" size="sm">
-                                            <Dropdown.Item eventKey="1">C++</Dropdown.Item>
-                                            <Dropdown.Item eventKey="2">JAVA</Dropdown.Item>
+                                        <DropdownButton activeKey={languageId} as={ButtonGroup} title={languageTitle} variant="outline-secondary" size="sm" onSelect={(e) => this.onlanguageSelected(e)}>
+                                            <Dropdown.Item eventKey="53">C++ (GCC 8.3.0)</Dropdown.Item>
+                                            <Dropdown.Item eventKey="54">C++ (GCC 9.2.0)</Dropdown.Item>
+                                            <Dropdown.Item eventKey="62">JAVA</Dropdown.Item>
+                                            <Dropdown.Item eventKey="70">Python (2.7.17)</Dropdown.Item>
+                                            <Dropdown.Item eventKey="71">Python (3.8.1)</Dropdown.Item>
+                                            <Dropdown.Item eventKey="49">C (GCC 8.3.0)</Dropdown.Item>
+                                            <Dropdown.Item eventKey="50">C (GCC 9.2.0)</Dropdown.Item>
                                         </DropdownButton>
-                                        <DropdownButton as={ButtonGroup} title="Theme" variant="outline-secondary">
-                                            <Dropdown.Item eventKey="1">Dark</Dropdown.Item>
-                                            <Dropdown.Item eventKey="2">Light</Dropdown.Item>
+                                        <DropdownButton activeKey={theme} as={ButtonGroup} title={theme} variant="outline-secondary" size="sm" onSelect={(e) => this.onThemeSelected(e)}>
+                                            <Dropdown.Item eventKey="monokai">monakai</Dropdown.Item>
+                                            <Dropdown.Item eventKey="github">github</Dropdown.Item>
+                                            <Dropdown.Item eventKey="xcode">xcode</Dropdown.Item>
+                                            <Dropdown.Item eventKey="terminal">terminal</Dropdown.Item>
                                         </DropdownButton>
                                     </ButtonGroup>
                                 </Card.Header>
@@ -291,8 +425,8 @@ class Editor extends Component {
                                     placeholder="Write your code from here"
                                     width="100%"
                                     height="100%"
-                                    mode="c_cpp"
-                                    theme="monokai"
+                                    mode={languageName}
+                                    theme={theme}
                                     name="blah2"
                                     onLoad={this.onLoad}
                                     onChange={this.onChange}
@@ -300,7 +434,7 @@ class Editor extends Component {
                                     showPrintMargin={true}
                                     showGutter={true}
                                     highlightActiveLine={true}
-                                    value={this.defaultCPP}
+                                    value={code}
                                     setOptions={{
                                         enableBasicAutocompletion: true,
                                         enableLiveAutocompletion: true,
@@ -308,13 +442,13 @@ class Editor extends Component {
                                         showLineNumbers: true,
                                         tabSize: 2,
                                     }} />
-                                {this.state.isPaneOpen ? <UserGreeting /> : null}
+                                {this.state.isPaneOpen ? <ProblemConsole output={output} /> : null}
                                 <ButtonGroup>
                                     <Button variant="outline-info" onClick={() => this.setState({ isPaneOpen: !this.state.isPaneOpen })}>
                                         console <FaAngleUp />
                                     </Button>
-                                    <Button variant="secondary" onClick={null}>Run Code</Button>
-                                    <Button>Submit</Button>
+                                    <Button variant="secondary" onClick={this.hadleCompile}>Run Code</Button>
+                                    <Button onClick={this.hadleSubmit}>Submit</Button>
                                 </ButtonGroup>
                             </Card>
                         </div>

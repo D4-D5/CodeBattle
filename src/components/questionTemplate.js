@@ -7,6 +7,7 @@ function createMarkup(problemStatement) {
 }
 
 function QuestionTemplate({ question }) {
+    
     return (
         <div>
             <Card>
@@ -28,14 +29,14 @@ function QuestionTemplate({ question }) {
                             <strong className="">Examples</strong>
                             <Card className="">
                                 <Card.Header className="">input</Card.Header>
-                                <Card.Body>
-                                    {question.sampleInput}
+                                <Card.Body className="nextLineProperty" style={{"white-space":"pre-wrap"}} dangerouslySetInnerHTML={createMarkup(question.fileSampleInput)}>
+                                    
                                 </Card.Body>
                             </Card>
                             <Card>
                                 <Card.Header className="">output</Card.Header>
-                                <Card.Body>
-                                    {question.sampleOutput}
+                                <Card.Body className="nextLineProperty" style={{"white-space":"pre-wrap"}} dangerouslySetInnerHTML={createMarkup(question.fileSampleOutput)}>
+                                    
                                 </Card.Body>
                             </Card>
                         </div>

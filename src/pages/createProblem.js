@@ -8,6 +8,8 @@ import MyChip from '../components/myChips'
 import SlidingPane from "react-sliding-pane";
 import { DIFFICULTY, CREATE_PROBLEM, GET_PROBLEMS } from '../constants';
 import { Link } from 'react-router-dom';
+import QuestionTemplate from '../components/questionTemplate';
+
 
 class CreateProblem extends Component {
     state = {
@@ -244,8 +246,20 @@ class CreateProblem extends Component {
 
     render() {
 
-        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
+        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, 
+            sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
 
+        const question = {
+            "problemTitle":problemTitle,
+            "problemStatement":problemStatement,
+            "difficultyLevel":difficultyLevel,
+            "chips":chips,
+            "sampleInput":sampleInput,
+            "sampleOutput":sampleOutput,
+            "inputSpecification":inputSpecification,
+            "outputSpecification":outputSpecification,
+            "ioExplaination":ioExplaination,
+        }
         console.log(chips)
         const tooltipSolutionDetails = (props) => (
             <Tooltip id="button-tooltip" {...props}>
@@ -266,9 +280,10 @@ class CreateProblem extends Component {
         console.log(sampleInput);
         console.log(sampleOutput);
         return (
-            <div className="row">
-                <div className="w-50">
-                <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} />
+            <div className="row" style={{height:"92vh"}}>
+                <div className="w-50" >
+                <QuestionTemplate question={question}/>
+                {/* <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} /> */}
                 </div>
                 <div className="w-50">
                     <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>

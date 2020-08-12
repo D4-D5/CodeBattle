@@ -125,6 +125,7 @@ class Lobby extends Component {
 
     componentDidMount() {
         let roomId = this.props.match.params.room_id;
+        localStorage.setItem("roomId",roomId)
         this.setState({
             roomId: roomId
         });
@@ -146,7 +147,11 @@ class Lobby extends Component {
 
                         if(msg=="CONTEST_STARTED"){
                             this.props.history.push("/editor/"+roomID);
-                        }else{
+                        }else if (msg == "CONTEST_ENDED") {
+                            //TODO
+                            this.props.history.push("/home");
+                        } 
+                        else{
                             var list = [...contestants,{"codeBattleId":msg}]
                             this.setState({
                                 contestants:list
