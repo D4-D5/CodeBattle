@@ -8,6 +8,7 @@ import { Button, Card, Tabs, Tab, ButtonGroup, DropdownButton, Dropdown } from '
 import ProblemSection from '../components/problemSection';
 import SplitPane from 'react-split-pane';
 import styled from "styled-components";
+import Navbar from '../components/navigation';
 
 var recur_cnt = 0;
 
@@ -209,7 +210,6 @@ class Editor extends Component {
     render() {
         return (
             <div className="row">
-
                 <Wrapper>
                     <SplitPane split="vertical" defaultSize="50%" minSize="300">
                         {/* <div className="w-50"> */}

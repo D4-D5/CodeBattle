@@ -1,8 +1,8 @@
-.navbar-brand {
+.navbar .navbar-brand {
     font-size: 1.45rem;
     font-weight: 300;
 }
-.nav-link {
+.navbar .nav-link {
     position: relative;
     display: inline-block;
     overflow: hidden;
@@ -14,7 +14,7 @@
     background-position: 100%;
     transition: background-position 275ms ease;
 }
-.nav-link:hover {
+.navbar .nav-link:hover {
     background-position: 0 100%;
 }
 @media (max-width: 991px){

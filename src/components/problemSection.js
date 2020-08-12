@@ -16,8 +16,8 @@ function ProblemSection({problemTitle,problemStatement,sampleInput,sampleOutput,
         }
     );
     return (
-        <div className="w-50">
-            <Card>
+        <div className="w-50 ">
+            <Card className="problemSection">
                 <Card.Header>
                     <Tabs defaultActiveKey="Problem" id="uncontrolled-tab-example">
                         <Tab eventKey="Problem" title="Problem">
@@ -39,15 +39,15 @@ function ProblemSection({problemTitle,problemStatement,sampleInput,sampleOutput,
                             <div className = "">
                                 <strong className="">Examples</strong>
                                 <Card className="">
-                                    <Card.Header className="">input</Card.Header>
+                                    <Card.Header className="">Input</Card.Header>
                                     <Card.Body>
                                     {sampleInput}
                                     </Card.Body>
                                 </Card>
                                 <Card>
-                                    <Card.Header className="">output</Card.Header>
+                                    <Card.Header className="">Output</Card.Header>
                                     <Card.Body>
-                                        <Button>Hello</Button>
+                                        {/* <Button>Hello</Button> */}
                                     {sampleOutput}
                                     </Card.Body>
                                 </Card>

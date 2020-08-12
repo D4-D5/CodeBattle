@@ -1,0 +1,24 @@
+.createProblem {
+    margin-top: 70px;
+    overflow: hidden;
+}
+.createProblemMain{
+    overflow-x: hidden;
+}
+.slide-pane{
+    margin-top: 85px;
+}
+.slide-pane__overlay.ReactModal__Overlay--after-open{
+    background-color: rgba(0,0,0,0.075);
+}
+.createProblem .problemSection{
+    margin-left: 18px;
+    margin-bottom: 20px;
+}
+.createProblem .primaryBtn{
+    display: flex;
+    margin: auto;
+}
+.createProblem .primaryBtn:hover{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.15);
+}

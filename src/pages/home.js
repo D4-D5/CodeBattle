@@ -25,7 +25,7 @@ class Home extends Component {
         return (
             <div>
                 <div className='landing_page'>
-                    <Navigation />
+                    <Navigation bgColor={"none"}/>
                     <HomeHeader />
                     <HomeCards />
                 </div>
