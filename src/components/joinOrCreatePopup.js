@@ -73,7 +73,8 @@ class JoinContestPopup extends Component {
                             <PrimaryButton buttonContent={"Join"} disabled={this.state.disabled}/>
                         </div>
                         <p className="mb-1 d-flex justify-content-center">OR</p>
-                        <PrimaryButton buttonContent={"Create a new contest"} disabled={false} onClick={this.createContest}/>
+                            <PrimaryButton buttonContent={"Create a new contest"} disabled={false} onClick={this.createContest} />
+
                     </Modal.Body>
                 </Modal>
                 
