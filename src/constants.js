@@ -8,7 +8,9 @@ export const GET_PROBLEMS = BASE_ADDRESS+"/api/getProblems";
 export const CREATE_LOBBY = BASE_ADDRESS+"/api/createLobby";
 export const ADD_CONTESTANT = BASE_ADDRESS+"/api/addContestant";
 export const GET_CONTESTANTS = BASE_ADDRESS+"/api/getContestants";
-export const SOCK_JS = "https://2d67c99f80ea.ngrok.io/ws";
+export const SOCK_JS = BASE_ADDRESS+"/ws";
+export const START_CONTEST = BASE_ADDRESS+"/api/startContest";
+export const GET_CONTEST_QUESTIONS = BASE_ADDRESS+"/api/getContestQuestions";
 
 //INVITE MSGS
 export const INVITE_MSG = "Hey! your friend has challenged you to fight a CodeBattle.\nClick the link to accept : \n"+LOBBY_ADDRESS+"/";

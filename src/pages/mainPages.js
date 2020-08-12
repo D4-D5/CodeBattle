@@ -21,7 +21,7 @@ class MainPages extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/sign-up" component={SignUp} />
           <Route exact path="/lobby/:room_id" component={Lobby} />
-          <Route exact path="/editor" component={Editor} />
+          <Route exact path="/editor/:room_id" component={Editor} />
           <Route exact path="/createProblem" component={CreateProblem} />
           <Route component={Error} />
         </Switch>

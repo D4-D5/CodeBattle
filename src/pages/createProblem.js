@@ -269,10 +269,11 @@ class CreateProblem extends Component {
         console.log(sampleInput);
         console.log(sampleOutput);
         return (
-            <div className="createProblemMain">
+        <div className="createProblemMain">
             <Navbar bgColor={"dark"}/>
             <div className="row createProblem">
                 <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} />
+                </div>
                 <div className="w-50">
                     {/* <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>
                         Create a new Problem
@@ -281,7 +282,7 @@ class CreateProblem extends Component {
                         <PrimaryButton  buttonContent={"Create a new problem"}/>
                     </div>
                     <div className="text-left container">
-                        <ListGroup>
+                        <ListGroup style={{ overflow: "scroll", maxHeight: "650px"}}>
                             {problems &&
                                 problems.map((problem, index) => {
                                     return (
@@ -465,7 +466,7 @@ class CreateProblem extends Component {
                 </div>
 
             </div>
-        </div>
+        // </div>
         )
     }
 }

@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { Row, ListGroup, Text, Toast, Col } from "react-bootstrap";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Container from "react-bootstrap/Container";
-import { INVITE_MSG, ADD_CONTESTANT, GET_CONTESTANTS, SOCK_JS } from '../constants';
+import { INVITE_MSG, ADD_CONTESTANT, GET_CONTESTANTS, SOCK_JS,START_CONTEST } from '../constants';
 import SockJS from "sockjs-client"
 import SockJsClient from 'react-stomp';
 import { TalkBox } from "react-talk";
@@ -18,7 +18,37 @@ class Lobby extends Component {
     }
 
     handleSubmit = () => {
-        this.props.history.push("/editor");
+        
+
+        var targetUrl = START_CONTEST
+        var data = JSON.stringify({
+            "roomId": this.state.roomId,
+            "owner": localStorage.getItem("codeBattleId")
+        });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': "application/json; charset=utf-8",
+                'Authorization': localStorage.getItem("tokenKey")
+            },
+            body: data
+        };
+
+        fetch(targetUrl, requestOptions)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result);
+                    if(result.status=="success"){
+                        
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                }
+            )
     }
 
     componentWillMount() {
@@ -113,11 +143,16 @@ class Lobby extends Component {
      
                 <SockJsClient url={SOCK_JS} topics={['/topic/'+roomID]}
                     onMessage={(msg) => { 
-                        var list = [...contestants,{"codeBattleId":msg}]
-                        this.setState({
-                            contestants:list
-                        })
-                        console.log("SockJS" + msg); 
+
+                        if(msg=="CONTEST_STARTED"){
+                            this.props.history.push("/editor/"+roomID);
+                        }else{
+                            var list = [...contestants,{"codeBattleId":msg}]
+                            this.setState({
+                                contestants:list
+                            })
+                            console.log("SockJS" + msg); 
+                        }
                     }}
                     ref={(client) => { this.clientRef = client }}
                     onConnect={(e) => {

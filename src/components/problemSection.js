@@ -1,20 +1,15 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { Card, Tabs, Tab, Button } from 'react-bootstrap'
+import QuestionTemplate from './questionTemplate';
+import LeaderboardTemplate from './leaderboardTemplate';
+import ContestProblemsTemplate from './contestProblemsTemplate';
 
-function createMarkup(problemStatement) {
-    return {__html: problemStatement};
-  }
 
-function ProblemSection({problemTitle,problemStatement,sampleInput,sampleOutput,inputSpecification,outputSpecification,ioExplaination}) {
-    const [state,setState] = useState(
-        {
-            problemTitle:"sdbjchb sj",
-            problemStatement:"Tanya wants to go on a journey across the cities of Berland. There are nn cities situated along the main railroad line of Berland, and these cities are numbered from 11 to nn",
-            inputSpecification:"he first line contains one integer n (1≤n≤2⋅105) — the number of cities in Berland.",
-            outputSpecification:"Specificatio",
-            ioExplaination:"The optimal journey plan in the first example is c=[2,4,5]."
-        }
-    );
+
+
+
+function ProblemSection({ questions }) {
+  
     return (
         <div className="w-50 ">
             <Card className="problemSection">
