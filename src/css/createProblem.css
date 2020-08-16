@@ -1,24 +1,33 @@
 .createProblem {
-    margin-top: 70px;
-    overflow: hidden;
+    margin-top: 50px;
 }
 .createProblemMain{
-    overflow-x: hidden;
+    overflow: hidden;
 }
-.slide-pane{
-    margin-top: 85px;
+.createProblemSlidePane{
+    margin-top: 55px;
+    max-height: 92%;
 }
 .slide-pane__overlay.ReactModal__Overlay--after-open{
     background-color: rgba(0,0,0,0.075);
-}
-.createProblem .problemSection{
-    margin-left: 18px;
-    margin-bottom: 20px;
-}
+}   
 .createProblem .primaryBtn{
     display: flex;
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 .createProblem .primaryBtn:hover{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.15);
+}
+.createProblem .questionsList{
+    overflow: auto;
+    max-height: 480px;
+    margin-right: 20px;
+}
+.createProblem .questionTemplate{
+    margin-left: 20px;
+}
+.createProblem .questionsList .primaryBtn{
+    margin: 0px;
 }

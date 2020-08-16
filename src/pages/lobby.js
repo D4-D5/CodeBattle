@@ -125,6 +125,7 @@ class Lobby extends Component {
 
     componentDidMount() {
         let roomId = this.props.match.params.room_id;
+        localStorage.setItem("roomId",roomId)
         this.setState({
             roomId: roomId
         });

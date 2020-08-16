@@ -1,0 +1,14 @@
+.problemSection .nav-tabs .nav-link:hover{
+    color: teal;
+}
+.problemSection .nav-tabs .nav-link.active{
+    color: teal;
+    box-shadow: 1px 2px 6px 0 rgba(0,0,0,0.2);
+}
+.problemSection .nav-tabs .nav-link:focus{
+    outline: transparent;
+}
+.problemSection a{
+    color: rgb(52,58,64);
+}
+

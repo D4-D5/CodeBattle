@@ -1,0 +1,12 @@
+.leaderBoard{
+    overflow: auto;
+    max-height: 600px;
+}
+.leaderBoard .tableHead{
+    background: rgb(52,58,64);
+    font-weight: 500;
+    color: white;
+}
+.leaderBoard tbody{
+    color: rgb(52,58,64);
+}

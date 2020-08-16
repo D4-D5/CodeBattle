@@ -8,9 +8,11 @@ import MyChip from '../components/myChips'
 import SlidingPane from "react-sliding-pane";
 import { DIFFICULTY, CREATE_PROBLEM, GET_PROBLEMS } from '../constants';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/navigation';
+import QuestionTemplate from '../components/questionTemplate';
 import PrimaryButton from '../components/primaryButton';
 import '../css/createProblem.css';
+import Navbar from '../components/navigation';
+
 
 class CreateProblem extends Component {
     state = {
@@ -42,6 +44,9 @@ class CreateProblem extends Component {
         this.setState({
             validated: true
         })
+    }
+    onEditClick = (e) => {
+
     }
 
     handleTextChange = (e) => {
@@ -247,8 +252,20 @@ class CreateProblem extends Component {
 
     render() {
 
-        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
+        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, 
+            sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
 
+        const question = {
+            "problemTitle":problemTitle,
+            "problemStatement":problemStatement,
+            "difficultyLevel":difficultyLevel,
+            "chips":chips,
+            "sampleInput":sampleInput,
+            "sampleOutput":sampleOutput,
+            "inputSpecification":inputSpecification,
+            "outputSpecification":outputSpecification,
+            "ioExplaination":ioExplaination,
+        }
         console.log(chips)
         const tooltipSolutionDetails = (props) => (
             <Tooltip id="button-tooltip" {...props}>
@@ -269,27 +286,23 @@ class CreateProblem extends Component {
         console.log(sampleInput);
         console.log(sampleOutput);
         return (
-        <div className="createProblemMain">
+            <div className="createProblemMain">
             <Navbar bgColor={"dark"}/>
             <div className="row createProblem">
-                <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} />
+                <div className="w-50" >
+                <QuestionTemplate question={question}/>
                 </div>
                 <div className="w-50">
-                    {/* <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>
-                        Create a new Problem
-                    </Button> */}
-                    <div onClick={() => this.setState({ isPaneOpen: true })}>
-                        <PrimaryButton  buttonContent={"Create a new problem"}/>
-                    </div>
+                    <PrimaryButton onClick={() => this.setState({ isPaneOpen: true })} buttonContent={"Create a new Problem"}/>
                     <div className="text-left container">
-                        <ListGroup style={{ overflow: "scroll", maxHeight: "650px"}}>
+                        <ListGroup className="questionsList">
                             {problems &&
                                 problems.map((problem, index) => {
                                     return (
                                         <ListGroup.Item>
                                             <Row className="d-flex">
                                                 <div className="pr-4">
-                                                    <p >
+                                                    <p>
                                                         {problem.id}
                                                     </p>
                                                 </div>
@@ -302,16 +315,12 @@ class CreateProblem extends Component {
 
 
                                                 <div className="pl-4">
-                                                    <Button onClick={(e) => this.editProblem(problems[index])}>
-                                                        Edit
-                                                    </Button>
+                                                    <PrimaryButton  onClick={(e) => this.editProblem(problems[index])} buttonContent={"Edit"}/>
                                                 </div>
 
                                                 <div className="pl-4">
-                                                    <Button disabled={(problem.problemStatus == "PUBLISHED") ? true : null} >
-
-                                                        {(problem.problemStatus == "PUBLISHED") ? "Already Published" : "Submit For Review"}
-                                                    </Button>
+                                                    <PrimaryButton 
+                                                    buttonContent={(problem.problemStatus == "PUBLISHED") ? "Already Published" : "Submit For Review"} disabled={(problem.problemStatus == "PUBLISHED") ? true : null}/>
                                                 </div>
                                             </Row>
                                         </ListGroup.Item>
@@ -320,7 +329,7 @@ class CreateProblem extends Component {
                         </ListGroup>
                     </div>
                     <SlidingPane
-                        className="slidingPane"
+                        className="createProblemSlidePane"
                         overlayClassName="some-custom-overlay-class"
                         isOpen={isPaneOpen}
                         title="Create Programming question"
@@ -459,14 +468,13 @@ class CreateProblem extends Component {
                                         </Col>
                                     </Form.Row>
                                 </Form.Group>
-                                <Button onClick={this.sendDataToserver}>Save</Button>
+                                <PrimaryButton onClick={this.sendDataToserver} buttonContent={"Save"} />
                             </Form>
                         </div>
                     </SlidingPane>
                 </div>
-
             </div>
-        // </div>
+            </div>
         )
     }
 }

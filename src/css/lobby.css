@@ -1,0 +1,122 @@
+.lobby{
+    height: 100vh;
+    overflow: hidden;
+}
+.lobby .lobbyRight{
+    background: #fafafa;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    height: 100vh;
+}
+.lobby .copyRoomId .card{
+    box-shadow: 0 3px 6px 0 rgba(0,0,0,0.175);
+    margin-top: 150px;
+    margin-right: 20px;
+}
+.lobby .copyRoomIdCard .copyRoomIdBtn{
+    width: 100%;
+    /* border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px; */
+}
+.lobby .copyRoomIdCard .card-title{
+    color: #35424e;
+    text-align: center;
+    border-bottom: 1px solid gainsboro;
+}
+.lobby .copyRoomIdCard .card-footer{
+    border-top: 0px;
+}
+.lobby .copyRoomIdCard .card-body{
+    padding: 11px;
+    font-family: nunito;
+}
+.lobby .roomId{
+    border: 1px dashed rgb(199, 198, 198);
+    text-align: center;
+    margin-bottom: 0;
+}
+.lobby .listOfParticipants{
+    margin: auto 100px;
+    margin-top: 100px;
+    /* margin-bottom: 30px; */
+}
+.lobby .listOfParticipants .card{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+.lobby .listOfParticipants .card-header{
+    font-size: 1.27rem;
+    color: #35424e;
+    font-weight: 400;
+    background: rgba(0,0,0,0.03);
+}
+.lobby .listOfParticipants .card .numberOfParticipants{
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: nunito;
+}
+.lobby .listOfParticipants .card .list{
+    overflow-y: scroll;
+    max-height: 500px;
+    /* scrollbar-width: thin; */
+}
+.lobby .primaryBtn{
+    display: flex;
+    margin: auto;
+}
+.lobby .primaryBtn:hover{
+    box-shadow: 0 8px 15px 0 rgba(0,0,0,0.3);
+}
+/* .navbar{
+    background: #35424e;
+} */
+.lobby .startImg{
+    display: flex;
+    margin: auto;
+    width: fit-content;
+    margin-top: 40px;
+}
+@media (max-width: 992px)
+{
+    .lobby{
+        overflow-y: scroll;
+        background: #fafafa;  
+    }
+    .lobby .lobbyRight{
+        background: none;
+        box-shadow: none;
+        height: fit-content;
+    }
+    .lobby .copyRoomId .card{
+        width: 70%;
+        margin: auto;
+        margin-top: 90px;
+    }
+    .lobby .startImg{
+        display: none;
+    }
+    .lobby .primaryBtn{
+        margin-top: 20px;
+    }
+    .lobby .listOfParticipants{
+        margin: auto 20px;
+        margin-top: 40px;
+        margin-bottom: 30px;
+    }
+}
+
+/* .lobby .lobbyHeader{
+    font-family: roboto;
+    font-weight: 400;
+} */
+/* @media (prefers-reduced-motion: no-preference) {
+    .lobby .startImg {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  } */

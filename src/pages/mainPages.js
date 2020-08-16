@@ -6,6 +6,7 @@ import SignUp from "./signup";
 import Lobby from './lobby';
 import Editor from './editor';
 import CreateProblem from './createProblem';
+import ContestEnded from './contestEnded';
 
 import Error from './error';
 
@@ -23,6 +24,7 @@ class MainPages extends Component {
           <Route exact path="/lobby/:room_id" component={Lobby} />
           <Route exact path="/editor/:room_id" component={Editor} />
           <Route exact path="/createProblem" component={CreateProblem} />
+          <Route exact path="/contestEnded" component={ContestEnded} />
           <Route component={Error} />
         </Switch>
       </div>
