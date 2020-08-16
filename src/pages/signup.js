@@ -52,7 +52,7 @@ export default class SignUp extends Component {
 
 
     componentDidMount() {
-        localStorage.setItem('loggedIn', 'true');
+        //localStorage.setItem('loggedIn', 'true');
         // this.setState({
         //     name:{value:"Ho gaya",errorMessage:"error aa gaya",errorState:true}
         // })
@@ -176,7 +176,7 @@ export default class SignUp extends Component {
         .then(
             (result) => {
                 if(result.status=="success"){
-                    localStorage.setItem('loggedIn', true);
+                    //localStorage.setItem('loggedIn', true);
                     localStorage.setItem('codeBattleId', userName.value);
                     this.props.history.push("/home");
                 }

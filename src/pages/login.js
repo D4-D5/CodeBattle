@@ -97,7 +97,7 @@ export default class Login extends Component {
             .then(
                 (result) => {
                     if(result.status=="success"){
-                        localStorage.setItem('loggedIn', true);
+                        //localStorage.setItem('loggedIn', true);
                         localStorage.setItem('codeBattleId', userName.value);
                         localStorage.setItem('tokenKey', result.message.tokenType+ " "+ result.message.accessToken);
                         this.props.history.push("/home");

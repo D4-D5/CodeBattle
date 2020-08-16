@@ -18,6 +18,8 @@ import { GET_CONTEST_QUESTIONS, SUBMIT_PROBLEM, SOCK_JS } from '../constants';
 import SockJsClient from 'react-stomp';
 import Countdown from 'react-countdown';
 
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+
 var recur_cnt = 0;
 
 const Wrapper = styled.div`
@@ -74,6 +76,7 @@ const Wrapper = styled.div`
 
 
 
+
 function ProblemConsole({ output }) {
     const [activetab, setActivetab] = useState('result');
     return (
@@ -95,13 +98,11 @@ function ProblemConsole({ output }) {
                 {activetab === "result" ? <div>{output}</div> : null}
             </Card.Body>
         </Card>
+
     );
 }
 
-
-
 class Editor extends Component {
-
 
     state = {
         code: '#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n\tcout<<"War Begin!";\n\treturn 0;\n}',
@@ -113,7 +114,9 @@ class Editor extends Component {
         languageId: "54",
         theme: "monokai",
         languageName: "c_cpp",
-        languageTitle: "C++ (GCC 9.2.0)"
+        languageTitle: "C++ (GCC 9.2.0)",
+        copiedText: "",
+        date: Date.now() + 2700000
     }
     defaultCPP = '';
     onChange = (newValue) => {
@@ -327,7 +330,7 @@ class Editor extends Component {
     }
 
     componentWillMount() {
-        let roomId = this.props.match.params.room_id;
+        let roomId = this.props.room_id;
         this.setState({
             roomId: roomId
         });
@@ -371,12 +374,43 @@ class Editor extends Component {
                 }
             )
     }
-    render() {
-        const { questions, status, output, code, languageId, theme, languageName, languageTitle, roomID } = this.state;
-        // console.log(questions[0]);
-        return (
 
+    handleOnPaste = (e) => {
+        console.log("pasted", e)
+
+        if (this.state.copiedText == e) {
+
+        } else {
+
+            //alert("You can't copy from external resources")
+            setTimeout(() => {
+                var str = this.state.code;
+                // console.log(str)
+                // console.log(e)
+                var hello = str.replace(e, "");
+                //console.log(hello)
+                //var temp = "MohitAccha"
+                this.setState({
+                    code: hello
+                })
+            }, 1);
+
+
+        }
+    }
+    handleOnCopy = (e) => {
+        console.log("copied", e)
+        this.setState({
+            copiedText: e
+        })
+    }
+    render() {
+        const { date,questions, status, output, code, languageId, theme, languageName, languageTitle, roomID } = this.state;
+        //console.log(code);
+        return (
             <div className="row">
+
+
                 <SockJsClient url={SOCK_JS} topics={['/topic/' + roomID]}
                     onMessage={(msg) => {
                         console.log(msg)
@@ -401,7 +435,7 @@ class Editor extends Component {
                         <div className="w-100" style={{ height: "100vh" }}>
                             <Card className="h-100">
                                 <Card.Header>
-                                    <Countdown date={Date.now() + 2700000} />
+                                    <Countdown date={date} />
                                     <ButtonGroup style={{ float: 'right' }} size="sm">
                                         <DropdownButton activeKey={languageId} as={ButtonGroup} title={languageTitle} variant="outline-secondary" size="sm" onSelect={(e) => this.onlanguageSelected(e)}>
                                             <Dropdown.Item eventKey="53">C++ (GCC 8.3.0)</Dropdown.Item>
@@ -434,6 +468,8 @@ class Editor extends Component {
                                     showPrintMargin={true}
                                     showGutter={true}
                                     highlightActiveLine={true}
+                                    onPaste={(e) => this.handleOnPaste(e)}
+                                    onCopy={(e) => this.handleOnCopy(e)}
                                     value={code}
                                     setOptions={{
                                         enableBasicAutocompletion: true,
@@ -455,6 +491,7 @@ class Editor extends Component {
                     </SplitPane>
                 </Wrapper>
             </div>
+
         )
     }
 }

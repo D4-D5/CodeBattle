@@ -163,7 +163,7 @@ class SignUp extends Component {
                 .then(
                     (result) => {
                         if (result.status == "success") {
-                            localStorage.setItem('loggedIn', true);
+                            //localStorage.setItem('loggedIn', true);
                             localStorage.setItem('codeBattleId', userName.value);
                             // this.props.history.push("/home");
                             this.props.handleCloseSignup();

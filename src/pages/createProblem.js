@@ -33,7 +33,8 @@ class CreateProblem extends Component {
         fileIdealSolution: null,
         fileInputTestCase: null,
         fileOutputTestCase: null,
-        problems: []
+        problems: [],
+        constraints: ""
 
     }
     handleSubmit = (e) => {
@@ -113,23 +114,26 @@ class CreateProblem extends Component {
 
 
     editProblem = (problem) => {
-        this.setState({problemTitle:problem.problemTitle})
-        this.setState({ difficultyLevel:problem.difficultyLevel})
-        this.setState({ fileIdealSolution:problem.fileIdealSolution})
-        this.setState({ fileInputTestCase:problem.fileInputTestCase})
-        this.setState({ fileOutputTestCase:problem.fileOutputTestCase})
-        this.setState({ fileSampleInput:problem.fileSampleInput})
-        this.setState({ fileSampleOutput:problem.fileSampleOutput})
-        this.setState({ fileSampleOutput:problem.fileSampleOutput})
-        this.setState({ inputSpecification:problem.inputSpecification})
-        this.setState({ ioExplanation:problem.ioExplanation})
-        this.setState({ maxCodeSize:problem.maxCodeSize})
-        this.setState({ memoryLimit:problem.memoryLimit})
-        this.setState({ outputSpecification:problem.outputSpecification})
-        this.setState({ problemStatement:problem.problemStatement})
-        this.setState({ problemStatement:problem.problemStatement})
-        this.setState({ timeLimit:problem.timeLimit})
-        this.setState({ chips:problem.tags})
+        this.setState({
+            problemTitle: problem.problemTitle,
+            difficultyLevel: problem.difficultyLevel,
+            fileIdealSolution: problem.fileIdealSolution,
+            fileInputTestCase: problem.fileInputTestCase,
+            fileOutputTestCase: problem.fileOutputTestCase,
+            fileSampleInput: problem.fileSampleInput,
+            fileSampleOutput: problem.fileSampleOutput,
+            fileSampleOutput: problem.fileSampleOutput,
+            inputSpecification: problem.inputSpecification,
+            ioExplanation: problem.ioExplanation,
+            maxCodeSize: problem.maxCodeSize,
+            memoryLimit: problem.memoryLimit,
+            outputSpecification: problem.outputSpecification,
+            problemStatement: problem.problemStatement,
+            problemStatement: problem.problemStatement,
+            timeLimit: problem.timeLimit,
+            chips: problem.tags,
+            constraints: problem.constraints
+        })
     }
 
     sendDataToserver = (e) => {
@@ -155,7 +159,8 @@ class CreateProblem extends Component {
             ioExplaination,
             timeLimit,
             memoryLimit,
-            maxCodeSize } = this.state;
+            maxCodeSize,
+            constraints } = this.state;
 
         console.log(chips)
         //  if (true) {
@@ -178,6 +183,7 @@ class CreateProblem extends Component {
         formData.append("timeLimit", timeLimit)
         formData.append("memoryLimit", memoryLimit)
         formData.append("maxCodeSize", maxCodeSize)
+        formData.append("constraints", constraints)
         formData.append("authorId", localStorage.getItem("codeBattleId"))
 
         const requestOptions = {
@@ -246,19 +252,19 @@ class CreateProblem extends Component {
 
     render() {
 
-        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips, 
+        const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips,
             sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination } = this.state
 
         const question = {
-            "problemTitle":problemTitle,
-            "problemStatement":problemStatement,
-            "difficultyLevel":difficultyLevel,
-            "chips":chips,
-            "sampleInput":sampleInput,
-            "sampleOutput":sampleOutput,
-            "inputSpecification":inputSpecification,
-            "outputSpecification":outputSpecification,
-            "ioExplaination":ioExplaination,
+            "problemTitle": problemTitle,
+            "problemStatement": problemStatement,
+            "difficultyLevel": difficultyLevel,
+            "chips": chips,
+            "sampleInput": sampleInput,
+            "sampleOutput": sampleOutput,
+            "inputSpecification": inputSpecification,
+            "outputSpecification": outputSpecification,
+            "ioExplaination": ioExplaination,
         }
         console.log(chips)
         const tooltipSolutionDetails = (props) => (
@@ -280,17 +286,17 @@ class CreateProblem extends Component {
         console.log(sampleInput);
         console.log(sampleOutput);
         return (
-            <div className="row" style={{height:"92vh"}}>
+            <div className="row" style={{ height: "92vh" }}>
                 <div className="w-50" >
-                <QuestionTemplate question={question}/>
-                {/* <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} /> */}
+                    <QuestionTemplate question={question} />
+                    {/* <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} /> */}
                 </div>
                 <div className="w-50">
                     <Button variant="outline-primary" onClick={() => this.setState({ isPaneOpen: true })}>
                         Create a new Problem
                     </Button>
                     <div className="text-left container">
-                        <ListGroup style={{ overflow: "scroll", maxHeight: "650px"}}>
+                        <ListGroup style={{ overflow: "scroll", maxHeight: "650px" }}>
                             {problems &&
                                 problems.map((problem, index) => {
                                     return (
@@ -351,16 +357,36 @@ class CreateProblem extends Component {
                                         required
                                     />
                                 </Form.Group>
-                                <Form.Group>
-                                    <strong>Difficulty level</strong><br />
-                                    <Form.Check id="difficultyLevel" inline label="Easy" type="radio" value={DIFFICULTY.easy} onChange={this.handleTextChange} />
-                                    <Form.Check id="difficultyLevel" inline label="Medium" type="radio" value={DIFFICULTY.medium} onChange={this.handleTextChange} />
-                                    <Form.Check id="difficultyLevel" inline label="Hard" type="radio" value={DIFFICULTY.hard} onChange={this.handleTextChange} />
+
+
+
+                                <Form.Group controlId="">
+                                    <Form.Label><strong>Input Specification</strong></Form.Label>
+                                    <CKEditor
+                                        data={this.state.inputSpecification}
+                                        onChange={(e) => this.handleEditorChange(e, "inputSpecification")}
+                                    />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Form.Label>Tags</Form.Label>
-                                    <MyChip chips={chips} handleChipsChange={this.handleChipsChange} />
+                                    <Form.Group controlId="">
+                                        <Form.Label><strong>Output Specification</strong></Form.Label>
+                                        <CKEditor
+                                            data={this.state.outputSpecification}
+                                            onChange={(e) => this.handleEditorChange(e, "outputSpecification")}
+                                        />
+                                    </Form.Group>
                                 </Form.Group>
+
+                                <Form.Group>
+                                    <Form.Group controlId="">
+                                        <Form.Label><strong>Constraints</strong></Form.Label>
+                                        <CKEditor
+                                            data={this.state.constraints}
+                                            onChange={(e) => this.handleEditorChange(e, "constraints")}
+                                        />
+                                    </Form.Group>
+                                </Form.Group>
+
                                 <Form.Group>
                                     <OverlayTrigger
                                         placement="right"
@@ -389,37 +415,7 @@ class CreateProblem extends Component {
                                 </Form.Group>
 
                                 <Form.Group controlId="">
-                                    <Form.Label><strong>Input Specification</strong></Form.Label>
-                                    <CKEditor
-                                        data={this.state.inputSpecification}
-                                        onChange={(e) => this.handleEditorChange(e, "inputSpecification")}
-                                    />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Group controlId="">
-                                        <Form.Label><strong>Output Specification</strong></Form.Label>
-                                        <CKEditor
-                                            data={this.state.outputSpecification}
-                                            onChange={(e) => this.handleEditorChange(e, "outputSpecification")}
-                                        />
-                                    </Form.Group>
-                                    <Form.Group></Form.Group>
-
-                                    <OverlayTrigger
-                                        placement="right"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={tooltipIdealSolution}>
-
-                                        <Form.Label><strong>Ideal Solution   </strong><BsFillQuestionDiamondFill /></Form.Label>
-
-                                    </OverlayTrigger>
-                                    <Form.File
-                                        accept=".txt"
-                                        onChange={(e) => this.showFile(e, "idealSolution", "fileIdealSolution")}
-                                    />
-                                </Form.Group>
-                                <Form.Group controlId="">
-                                    <Form.Label>Sample Explanation</Form.Label>
+                                    <Form.Label><strong>Sample Explanation</strong></Form.Label>
                                     <CKEditor
                                         id="sampleExplanation"
                                         data={this.state.sampleExplanation}
@@ -443,29 +439,62 @@ class CreateProblem extends Component {
                                         />
                                     </Form.Row>
                                 </Form.Group>
+
                                 <Form.Group>
                                     <OverlayTrigger
                                         placement="right"
                                         delay={{ show: 250, hide: 400 }}
-                                        overlay={tooltipLimits}>
+                                        overlay={tooltipIdealSolution}>
 
-                                        <Form.Label><strong>Coder checker Limits   </strong><BsFillQuestionDiamondFill /></Form.Label>
+                                        <Form.Label><strong>Ideal Solution   </strong><BsFillQuestionDiamondFill /></Form.Label>
 
                                     </OverlayTrigger>
-                                    <Form.Row>
-                                        <Col>
-                                            <Form.Label>Time limit (sec)</Form.Label>
-                                            <Form.Control id="timeLimit" placeholder="" value={this.state.timeLimit} required onChange={this.handleTextChange} />
-                                        </Col>
-                                        <Col>
-                                            <Form.Label>Memory limit (MB)</Form.Label>
-                                            <Form.Control id="memoryLimit" placeholder="" value={this.state.memoryLimit} required onChange={this.handleTextChange} />
-                                        </Col>
-                                        <Col>
-                                            <Form.Label>Maximum size code (KB)</Form.Label>
-                                            <Form.Control id="maxCodeSize" placeholder="" value={this.state.maxCodeSize} required onChange={this.handleTextChange} />
-                                        </Col>
-                                    </Form.Row>
+                                    <Form.File
+                                        accept=".txt"
+                                        onChange={(e) => this.showFile(e, "idealSolution", "fileIdealSolution")}
+                                    />
+                                </Form.Group>
+
+                                <Form.Group>
+
+
+                                    <Form.Group>
+                                        <strong>Difficulty level</strong><br />
+                                        <Form.Check id="difficultyLevel" inline label="Easy" type="radio" value={DIFFICULTY.easy} onChange={this.handleTextChange} />
+                                        <Form.Check id="difficultyLevel" inline label="Medium" type="radio" value={DIFFICULTY.medium} onChange={this.handleTextChange} />
+                                        <Form.Check id="difficultyLevel" inline label="Hard" type="radio" value={DIFFICULTY.hard} onChange={this.handleTextChange} />
+                                    </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label><strong>Tags</strong></Form.Label>
+                                        <MyChip chips={chips} handleChipsChange={this.handleChipsChange} />
+                                    </Form.Group>
+
+                                    <Form.Group>
+                                        <OverlayTrigger
+                                            placement="right"
+                                            delay={{ show: 250, hide: 400 }}
+                                            overlay={tooltipLimits}>
+
+                                            <Form.Label><strong>Coder checker Limits   </strong><BsFillQuestionDiamondFill /></Form.Label>
+
+                                        </OverlayTrigger>
+
+                                        <Form.Row>
+
+                                            <Col>
+                                                <Form.Label>Time limit (sec)</Form.Label>
+                                                <Form.Control id="timeLimit" placeholder="" value={this.state.timeLimit} required onChange={this.handleTextChange} />
+                                            </Col>
+                                            <Col>
+                                                <Form.Label>Memory limit (MB)</Form.Label>
+                                                <Form.Control id="memoryLimit" placeholder="" value={this.state.memoryLimit} required onChange={this.handleTextChange} />
+                                            </Col>
+                                            <Col>
+                                                <Form.Label>Maximum size code (KB)</Form.Label>
+                                                <Form.Control id="maxCodeSize" placeholder="" value={this.state.maxCodeSize} required onChange={this.handleTextChange} />
+                                            </Col>
+                                        </Form.Row>
+                                    </Form.Group>
                                 </Form.Group>
                                 <Button onClick={this.sendDataToserver}>Save</Button>
                             </Form>

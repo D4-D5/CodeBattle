@@ -8,6 +8,7 @@ import Editor from './editor';
 import CreateProblem from './createProblem';
 
 import Error from './error';
+import FullScreenComponent from '../components/fullScreenComponent';
 
 
 class MainPages extends Component {
@@ -21,7 +22,7 @@ class MainPages extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/sign-up" component={SignUp} />
           <Route exact path="/lobby/:room_id" component={Lobby} />
-          <Route exact path="/editor/:room_id" component={Editor} />
+          <Route exact path="/editor/:room_id" component={FullScreenComponent} />
           <Route exact path="/createProblem" component={CreateProblem} />
           <Route component={Error} />
         </Switch>

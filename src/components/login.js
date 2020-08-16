@@ -4,7 +4,9 @@ import image from '../assets/images/abc.svg';
 import { Form, Button, Modal, Row, Col, InputGroup } from 'react-bootstrap';
 import '../css/modal.css'
 import { LOGIN_USER } from "../constants";
-import { Route , withRouter} from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
+import Cookie from "js-cookie"
+import axios from 'axios';
 
 class Login extends Component {
 
@@ -37,7 +39,7 @@ class Login extends Component {
   }
 
   isDataValid() {
-  
+
     const userName = { ...this.state.userName };
     const password = { ...this.state.password };
 
@@ -75,13 +77,11 @@ class Login extends Component {
     // alert(haveCodeforces);
     //if (this.isDataValid()) {
     const requestOptions = {
-      method: 'POST',
       headers: {
         'Content-Type': "application/json; charset=utf-8",
         'Access-Control-Allow-Origin': '*',
         'Authorization': localStorage.getItem("tokenKey")
       },
-
 
       body: JSON.stringify({
         "codeBattleId": userName.value,
@@ -89,13 +89,37 @@ class Login extends Component {
       })
 
     };
+    // axios.post(targetUrl, {
+    //   "codeBattleId": userName.value,
+    //   "password": password.value,
+    // }, { withCredentials: true },{headers:{
+    //   'Content-Type': "application/json; charset=utf-8",
+    //   'Access-Control-Allow-Origin': 'https://bc9f49b6ccbc.ngrok.io'
+    // }})
+    //   .then(
+    //     (result) => {
+    //       if (result.status == "success") {
+    //         //localStorage.setItem('loggedIn', true);
+    //         localStorage.setItem('codeBattleId', userName.value);
+    //         //Cookie.set("token", result.message.tokenType + " " + result.message.accessToken);
+    //         localStorage.setItem('tokenKey', result.message.tokenType + " " + result.message.accessToken);
+    //         //this.props.history.push("/home");
+    //         this.props.handleCloseLogin();
+    //       }
+    //       //this.props.history.push("/home");
+    //       console.log(result);
+    //     },
+    //     (error) => {
+    //       console.log(error);
+    //     }
+    //   )
     fetch(targetUrl, requestOptions)
-      .then(res => res.json())
       .then(
         (result) => {
           if (result.status == "success") {
-            localStorage.setItem('loggedIn', true);
+            //localStorage.setItem('loggedIn', true);
             localStorage.setItem('codeBattleId', userName.value);
+            //Cookie.set("token", result.message.tokenType + " " + result.message.accessToken);
             localStorage.setItem('tokenKey', result.message.tokenType + " " + result.message.accessToken);
             //this.props.history.push("/home");
             this.props.handleCloseLogin();
@@ -109,13 +133,14 @@ class Login extends Component {
       )
 
 
+
   }
-  handleTextChange = (e) => {  
+  handleTextChange = (e) => {
     this.setState({
-        [e.target.id]: { ...this.state[e.target.id], value: e.target.value }
+      [e.target.id]: { ...this.state[e.target.id], value: e.target.value }
     })
-    
-}
+
+  }
 
 
   render() {

@@ -17,7 +17,7 @@ class Lobby extends Component {
         contestants: []
     }
 
-    handleSubmit = () => {
+    handleStartContest = () => {
         
 
         var targetUrl = START_CONTEST
@@ -52,7 +52,7 @@ class Lobby extends Component {
     }
 
     componentWillMount() {
-        localStorage.getItem('loggedIn') == 'false' && this.props.history.push('/login');
+        //localStorage.getItem('loggedIn') == 'false' && this.props.history.push('/login');
     }
 
 
@@ -129,7 +129,12 @@ class Lobby extends Component {
         this.setState({
             roomId: roomId
         });
-        this.addContestant(roomId)
+
+        if(this.props.location.state){
+            this.getContestants(roomId)
+        }else{
+            this.addContestant(roomId)
+        }
     }
     
     render() {
@@ -189,7 +194,7 @@ class Lobby extends Component {
                             </CopyToClipboard>
                         </div>
                     </Card.Body>
-                    <Button onClick={this.handleSubmit}>Lets Begin!</Button>
+                    {this.props.location.state?<Button onClick={this.handleStartContest}>Let's Begin!</Button>:null}
                 </Card>
                 <Toast onClose={() => this.setState({ copySuccess: false })} show={this.state.copySuccess} delay={3000} autohide style={{ position: "absolute", bottom: "0" }}>
                     <Toast.Header>

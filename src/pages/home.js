@@ -17,7 +17,7 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        localStorage.getItem('loggedIn') == 'false' && this.props.history.push('/login');
+        //localStorage.getItem('loggedIn') == 'false' && this.props.history.push('/login');
     }
 
     render() {
