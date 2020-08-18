@@ -31,13 +31,11 @@ class JoinContestPopup extends Component {
         const requestOptions = {
             method: 'POST',
             headers: {
-                "Access-Control-Allow-Credentials":true,
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': "application/json; charset=utf-8",
                 'Authorization': localStorage.getItem("tokenKey")
             },
-            body: data,
-            credentials:"include"
+            body: data,            
         };
 
         fetch(targetUrl, requestOptions)

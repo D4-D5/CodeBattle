@@ -1,5 +1,5 @@
 //URLS
-export const BASE_ADDRESS = "https://996462c9b963.ngrok.io";
+export const BASE_ADDRESS = "https://038311a6fc1f.ngrok.io";
 export const LOBBY_ADDRESS = BASE_ADDRESS+"/lobby";
 export const CREATE_PROBLEM = BASE_ADDRESS+"/api/createProblem";
 export const REGISTER_USER = BASE_ADDRESS+"/api/register";
@@ -13,6 +13,7 @@ export const START_CONTEST = BASE_ADDRESS+"/api/startContest";
 export const GET_CONTEST_QUESTIONS = BASE_ADDRESS+"/api/getContestQuestions";
 export const SUBMIT_PROBLEM = BASE_ADDRESS+"/api/submitProblem";
 export const GET_LEADERBOARD = BASE_ADDRESS+"/api/getLeaderboard";
+export const END_CONTEST_USER = BASE_ADDRESS+"/api/endContestForUser";
 
 //INVITE MSGS
 export const INVITE_MSG = "Hey! your friend has challenged you to fight a CodeBattle.\nClick the link to accept : \n"+LOBBY_ADDRESS+"/";

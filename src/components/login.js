@@ -77,10 +77,10 @@ class Login extends Component {
     // alert(haveCodeforces);
     //if (this.isDataValid()) {
     const requestOptions = {
+      method:"POST",
       headers: {
         'Content-Type': "application/json; charset=utf-8",
-        'Access-Control-Allow-Origin': '*',
-        'Authorization': localStorage.getItem("tokenKey")
+        'Access-Control-Allow-Origin': '*'
       },
 
       body: JSON.stringify({
@@ -114,6 +114,7 @@ class Login extends Component {
     //     }
     //   )
     fetch(targetUrl, requestOptions)
+      .then(res => res.json())
       .then(
         (result) => {
           if (result.status == "success") {

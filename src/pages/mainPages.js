@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, withRouter } from "react-router-dom";
 
-import Login from "./login";
-import SignUp from "./signup";
 import Lobby from './lobby';
 import Editor from './editor';
 import CreateProblem from './createProblem';
@@ -19,8 +17,8 @@ class MainPages extends Component {
       <div>
         
         <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/sign-up" component={SignUp} />
+          {/* <Route exact path="/login" component={Login} />
+          <Route exact path="/sign-up" component={SignUp} /> */}
           <Route exact path="/lobby/:room_id" component={Lobby} />
           <Route exact path="/editor/:room_id" component={FullScreenComponent} />
           <Route exact path="/createProblem" component={CreateProblem} />

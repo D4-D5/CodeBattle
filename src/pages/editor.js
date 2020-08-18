@@ -77,26 +77,29 @@ const Wrapper = styled.div`
 
 
 
-function ProblemConsole({ output }) {
+function ProblemConsole({ output,createSubmission }) {
     const [activetab, setActivetab] = useState('result');
+    const [customTestInput, setCustomTestInput] = useState("");
+
+    function handleOnRun(){
+        createSubmission(customTestInput)
+        setActivetab('result')
+    }
+
     return (
         <Card style={{ position: 'absolute', bottom: 39, right: 1, left: 1, top: "50%", zIndex: "4" }}>
-            <Card.Header>
-                <Tabs
-                    id="controlled-tab-example"
-                    activeKey={activetab}
-                    onSelect={(activetab) => setActivetab(activetab)}
-                >
-                    <Tab eventKey="testcase" title="Test Cases">
-                    </Tab>
-                    <Tab eventKey="result" title="Result">
-                    </Tab>
-                </Tabs>
-            </Card.Header>
-            <Card.Body>
-                {activetab === "testcase" ? <div><textarea></textarea></div> : null}
-                {activetab === "result" ? <div>{output}</div> : null}
-            </Card.Body>
+            <Tabs
+                id="controlled-tab-example"
+                activeKey={activetab}
+                onSelect={(activetab) => setActivetab(activetab)}>
+                <Tab eventKey="testcase" title="Custom Test Cases">
+                    <div>
+                        <textarea placeholder="Enter Custom Input here" value={customTestInput} onChange={(e)=>setCustomTestInput(e.target.value)}/>
+                        <Button onClick={()=>handleOnRun()}>Run</Button>
+                    </div>
+                </Tab>
+                <Tab eventKey="result" title="Result"><div style={{"white-space":"pre-wrap"}}>{output}</div> </Tab>
+            </Tabs>
         </Card>
 
     );
@@ -124,6 +127,7 @@ class Editor extends Component {
         this.setState({
             code: newValue
         })
+        //localStorage.setItem(localStorage.getItem("currentQuestionId"),newValue)
     }
 
     handleTextInput = (e) => {
@@ -131,18 +135,30 @@ class Editor extends Component {
             [e.target.id]: e.target.value
         })
     }
-
-    hadleCompile = (e) => {
+    onEditorFocus = () =>{
+        if(this.state.isPaneOpen){
+            this.setState({ isPaneOpen: false })
+        }
+    }
+    handleCompile = (e) => {
         console.log(this.state.code);
         recur_cnt = 0;
-        this.setState({ isPaneOpen: !this.state.isPaneOpen })
-        this.createSubmission();
+        if(!this.state.isPaneOpen){
+            this.setState({ isPaneOpen: true })
+        }
+
+        this.createSubmission(this.state.input);
 
     }
-    hadleSubmit = (e) => {
+    handleSubmit = (e) => {
+        if(!this.state.isPaneOpen){
+            this.setState({ isPaneOpen: true })
+        }
         console.log(this.state.code);
         recur_cnt = 0;
-        this.setState({ isPaneOpen: !this.state.isPaneOpen })
+        this.setState({
+            output:""
+        })
         this.submitSolutionToServer();
 
     }
@@ -330,17 +346,23 @@ class Editor extends Component {
     }
 
     componentWillMount() {
-        let roomId = this.props.room_id;
+        let roomId = this.props.room_id
+        localStorage.setItem("roomId", roomId)
         this.setState({
             roomId: roomId
         });
+        console.log(roomId)
         this.getContestQuestions(roomId)
     }
 
 
 
-    createSubmission = () => {
-        const { code, input } = this.state;
+    createSubmission = (input) => {
+
+        this.setState({
+            output: ""
+        })
+        const { code } = this.state;
         var targetUrl = "https://judge0.p.rapidapi.com/submissions"
         var data = JSON.stringify({
             "language_id": this.state.languageId,
@@ -398,6 +420,8 @@ class Editor extends Component {
 
         }
     }
+
+    
     handleOnCopy = (e) => {
         console.log("copied", e)
         this.setState({
@@ -405,8 +429,8 @@ class Editor extends Component {
         })
     }
     render() {
-        const { date,questions, status, output, code, languageId, theme, languageName, languageTitle, roomID } = this.state;
-        //console.log(code);
+        const { date, questions, status, output, languageId, code, theme, languageName, languageTitle, roomID } = this.state;
+        // console.log(code);
         return (
             <div className="row">
 
@@ -436,6 +460,7 @@ class Editor extends Component {
                             <Card className="h-100">
                                 <Card.Header>
                                     <Countdown date={date} />
+                                    <Button>End Contest</Button>
                                     <ButtonGroup style={{ float: 'right' }} size="sm">
                                         <DropdownButton activeKey={languageId} as={ButtonGroup} title={languageTitle} variant="outline-secondary" size="sm" onSelect={(e) => this.onlanguageSelected(e)}>
                                             <Dropdown.Item eventKey="53">C++ (GCC 8.3.0)</Dropdown.Item>
@@ -464,6 +489,7 @@ class Editor extends Component {
                                     name="blah2"
                                     onLoad={this.onLoad}
                                     onChange={this.onChange}
+                                    onFocus={this.onEditorFocus}
                                     fontSize={16}
                                     showPrintMargin={true}
                                     showGutter={true}
@@ -478,13 +504,13 @@ class Editor extends Component {
                                         showLineNumbers: true,
                                         tabSize: 2,
                                     }} />
-                                {this.state.isPaneOpen ? <ProblemConsole output={output} /> : null}
+                                {this.state.isPaneOpen ? <ProblemConsole output={output} createSubmission={(e)=>this.createSubmission(e)} /> : null}
                                 <ButtonGroup>
                                     <Button variant="outline-info" onClick={() => this.setState({ isPaneOpen: !this.state.isPaneOpen })}>
                                         console <FaAngleUp />
                                     </Button>
-                                    <Button variant="secondary" onClick={this.hadleCompile}>Run Code</Button>
-                                    <Button onClick={this.hadleSubmit}>Submit</Button>
+                                    <Button variant="secondary" onClick={this.handleCompile}>Run Code</Button>
+                                    <Button onClick={this.handleSubmit}>Submit</Button>
                                 </ButtonGroup>
                             </Card>
                         </div>
