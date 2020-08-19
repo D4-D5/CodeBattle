@@ -26,16 +26,20 @@ function QuestionTemplate({ question }) {
                             <div dangerouslySetInnerHTML={createMarkup(question.outputSpecification)} />
                         </div>
                         <div className="">
+                            <strong>Constraints</strong>
+                            <div dangerouslySetInnerHTML={createMarkup(question.constraints)} />
+                        </div>
+                        <div className="">
                             <strong className="">Examples</strong>
                             <Card className="">
                                 <Card.Header className="">input</Card.Header>
-                                <Card.Body className="nextLineProperty" style={{"white-space":"pre-wrap"}} dangerouslySetInnerHTML={createMarkup(question.fileSampleInput)}>
+                                <Card.Body className="nextLineProperty" style={{"white-space":"pre-wrap"}} dangerouslySetInnerHTML={createMarkup(question.sampleInput)}>
                                     
                                 </Card.Body>
                             </Card>
                             <Card>
                                 <Card.Header className="">output</Card.Header>
-                                <Card.Body className="nextLineProperty" style={{"white-space":"pre-wrap"}} dangerouslySetInnerHTML={createMarkup(question.fileSampleOutput)}>
+                                <Card.Body className="nextLineProperty" style={{"white-space":"pre-wrap"}} dangerouslySetInnerHTML={createMarkup(question.sampleOutput)}>
                                     
                                 </Card.Body>
                             </Card>

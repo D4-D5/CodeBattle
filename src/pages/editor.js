@@ -114,9 +114,9 @@ class Editor extends Component {
         questions: [],
         status: "IDLE",
         output: "",
-        languageId: "54",
         theme: "monokai",
         languageName: "c_cpp",
+        languageId: "54",
         languageTitle: "C++ (GCC 9.2.0)",
         copiedText: "",
         date: Date.now() + 2700000

@@ -1,7 +1,8 @@
 //URLS
-export const BASE_ADDRESS = "https://038311a6fc1f.ngrok.io";
+export const BASE_ADDRESS = "https://d52c70f1f89e.ngrok.io";
 export const LOBBY_ADDRESS = BASE_ADDRESS+"/lobby";
 export const CREATE_PROBLEM = BASE_ADDRESS+"/api/createProblem";
+export const UPDATE_PROBLEM = BASE_ADDRESS+"/api/updateProblem";
 export const REGISTER_USER = BASE_ADDRESS+"/api/register";
 export const LOGIN_USER = BASE_ADDRESS+"/api/login";
 export const GET_PROBLEMS = BASE_ADDRESS+"/api/getProblems";
@@ -14,6 +15,10 @@ export const GET_CONTEST_QUESTIONS = BASE_ADDRESS+"/api/getContestQuestions";
 export const SUBMIT_PROBLEM = BASE_ADDRESS+"/api/submitProblem";
 export const GET_LEADERBOARD = BASE_ADDRESS+"/api/getLeaderboard";
 export const END_CONTEST_USER = BASE_ADDRESS+"/api/endContestForUser";
+export const SEND_FOR_REVIEW = BASE_ADDRESS+"/api/sendToReview";
+
+//literals
+export const maxCodeSize = 65535;
 
 //INVITE MSGS
 export const INVITE_MSG = "Hey! your friend has challenged you to fight a CodeBattle.\nClick the link to accept : \n"+LOBBY_ADDRESS+"/";
