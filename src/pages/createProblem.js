@@ -20,6 +20,7 @@ import QuestionTemplate from '../components/questionTemplate';
 
 
 class CreateProblem extends Component {
+    
     state = {
         validated: false,
         isPaneOpen: false,
@@ -42,7 +43,7 @@ class CreateProblem extends Component {
         fileInputTestCase: null,
         fileOutputTestCase: null,
         problems: [],
-        constraints: "",
+        constraints: "$n$",
         languageId: "54",
         languageTitle: "C++ (GCC 9.2.0)",
         problemActionType: "New",
@@ -221,8 +222,8 @@ class CreateProblem extends Component {
             fileOutputTestCase: problem.fileOutputTestCase,
             fileSampleInput: problem.fileSampleInput,
             fileSampleOutput: problem.fileSampleOutput,
-            sampleInput: problem.fileSampleInput,
-            sampleOutput: problem.fileSampleOutput,
+            sampleInput: problem.sampleInput,
+            sampleOutput: problem.sampleOutput,
             fileSampleOutput: problem.fileSampleOutput,
             inputSpecification: problem.inputSpecification,
             ioExplanation: problem.ioExplanation,
@@ -425,7 +426,7 @@ class CreateProblem extends Component {
             "ioExplaination": ioExplaination,
             "constraints": constraints
         }
-        console.log(chips)
+        
         const tooltipSolutionDetails = (props) => (
             <Tooltip id="button-tooltip" {...props}>
                 The sample input and output must be uploaded in the format of .txt files up to the size of 5 MB.
@@ -472,6 +473,7 @@ class CreateProblem extends Component {
                                                         {problem.problemTitle}
                                                     </Link>
                                                 </div>
+                                                
                                                 <Badge  pill variant="dark">{problem.problemStatus}</Badge>
 
                                                 <div className="pl-4">
@@ -575,6 +577,7 @@ class CreateProblem extends Component {
                                     </OverlayTrigger>
                                     <Form.Row>
                                         <Form.File
+                                            multiple
                                             required
                                             id="sampleInput"
                                             label="Sample Input File"
