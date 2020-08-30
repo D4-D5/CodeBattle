@@ -4,6 +4,7 @@ import QuestionTemplate from './questionTemplate';
 import LeaderboardTemplate from './leaderboardTemplate';
 import ContestProblemsTemplate from './contestProblemsTemplate';
 import { GET_LEADERBOARD } from '../constants';
+import '../css/problemSection.css'
 
 
 
@@ -56,7 +57,7 @@ class ProblemSection extends Component {
         const {questions} = this.props
         const {key,contestants} = this.state
         return (
-            <div>
+            <div className="problemSection">
                 <Tabs activeKey={key} id="uncontrolled-tab-example" onSelect={(e) => this.onTabSelected(e)}>
                     <Tab eventKey="Problems" title="Problems"><ContestProblemsTemplate questions={questions} /></Tab>
                     <Tab eventKey="Leaderboard" title="Leaderboard"><LeaderboardTemplate contestants={contestants}/></Tab>

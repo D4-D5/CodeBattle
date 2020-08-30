@@ -17,6 +17,8 @@ import styled from "styled-components";
 import { GET_CONTEST_QUESTIONS, SUBMIT_PROBLEM, SOCK_JS } from '../constants';
 import SockJsClient from 'react-stomp';
 import Countdown from 'react-countdown';
+import '../css/editor.css';
+import PrimaryButton from '../components/primaryButton';
 
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
@@ -87,7 +89,8 @@ function ProblemConsole({ output,createSubmission }) {
     }
 
     return (
-        <Card style={{ position: 'absolute', bottom: 39, right: 1, left: 1, top: "50%", zIndex: "4" }}>
+        <Card style={{ position: 'absolute', bottom: 39, right: 1, left: 1, top: "50%", zIndex: "4" }}
+        className="consoleCard">
             <Tabs
                 id="controlled-tab-example"
                 activeKey={activetab}
@@ -432,7 +435,7 @@ class Editor extends Component {
         const { date, questions, status, output, languageId, code, theme, languageName, languageTitle, roomID } = this.state;
         // console.log(code);
         return (
-            <div className="row">
+            <div className="row editor">
 
 
                 <SockJsClient url={SOCK_JS} topics={['/topic/' + roomID]}
@@ -452,15 +455,16 @@ class Editor extends Component {
 
                         <div className="w-100" style={{ height: "100vh" }}>
 
-                            {status === "DONE" ? <ProblemSection questions={questions} /> : <Spinner animation="border" />}
+                            {status === "DONE" ? <ProblemSection questions={questions} /> : <Spinner animation="border" 
+                            className="problemSectionLoader"/>}
 
                         </div>
 
-                        <div className="w-100" style={{ height: "100vh" }}>
+                        <div className="w-100 compiler" style={{ height: "100vh" }}>
                             <Card className="h-100">
                                 <Card.Header>
                                     <Countdown date={date} />
-                                    <Button>End Contest</Button>
+                                    {/* <Button>End Contest</Button> */}
                                     <ButtonGroup style={{ float: 'right' }} size="sm">
                                         <DropdownButton activeKey={languageId} as={ButtonGroup} title={languageTitle} variant="outline-secondary" size="sm" onSelect={(e) => this.onlanguageSelected(e)}>
                                             <Dropdown.Item eventKey="53">C++ (GCC 8.3.0)</Dropdown.Item>
@@ -506,11 +510,14 @@ class Editor extends Component {
                                     }} />
                                 {this.state.isPaneOpen ? <ProblemConsole output={output} createSubmission={(e)=>this.createSubmission(e)} /> : null}
                                 <ButtonGroup>
-                                    <Button variant="outline-info" onClick={() => this.setState({ isPaneOpen: !this.state.isPaneOpen })}>
+                                    <Button variant="outline-info"
+                                    className="consoleBtn" onClick={() => this.setState({ isPaneOpen: !this.state.isPaneOpen })}>
                                         console <FaAngleUp />
                                     </Button>
-                                    <Button variant="secondary" onClick={this.handleCompile}>Run Code</Button>
-                                    <Button onClick={this.handleSubmit}>Submit</Button>
+                                    <Button variant="secondary" 
+                                    className="runCodeBtn" onClick={this.handleCompile}>Run Code</Button>
+                                    <Button onClick={this.handleSubmit}
+                                    className="submitBtn">Submit</Button>
                                 </ButtonGroup>
                             </Card>
                         </div>

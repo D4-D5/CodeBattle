@@ -155,7 +155,7 @@ class Login extends Component {
             <img src={image} className="img-fluid login_img" alt=""></img>
           </Col>
           <Col sm={6}>
-            <Modal.Header className="justify-content-center border-bottom-0 pb-0">
+            <Modal.Header className="justify-content-center border-bottom-0 pb-0" closeButton>
               <Modal.Title className="text-center">Login
                 <p className="text-center">Join the best coding community</p>
               </Modal.Title>
@@ -206,7 +206,7 @@ class Login extends Component {
                 Login
               </Button>
               <p className="my-2 justify-content-end">Don't have an account?
-              <Button className="mb-2" variant="primary" type="submit" onClick={this.hideAndShowSignup}>
+              <Button className="mb-2 ml-2" variant="primary" type="submit" onClick={this.hideAndShowSignup}>
                   Sign Up
               </Button></p>
             </div>

@@ -38,15 +38,15 @@ function HomeCards() {
           </div>
 
           <div class="col-lg-3 col-md-6 col-12 mb-3">
-            <HomeMainCard img={image1} title={"Rated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Compete with Friends"} disabled={false} routeChange={routeChange}/>
+            <HomeMainCard img={image1} title={"Rated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Compete with Friends"} disabled={true} routeChange={routeChange}/>
           </div>
 
           <div class="col-lg-3 col-md-6 col-12 mb-3">
-            <HomeMainCard img={image4} title={"Unrated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Practice with Others"} disabled={false} routeChange={routeChange}/>
+            <HomeMainCard img={image4} title={"Unrated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Practice with Others"} disabled={true} routeChange={routeChange}/>
           </div>
 
           <div class="col-lg-3 col-md-6 col-12 mb-3">
-            <HomeMainCard img={image2} title={"Rated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Compete with Others"} disabled={false} routeChange={routeChange}/>
+            <HomeMainCard img={image2} title={"Rated"} content={"Lorem Ipsum is simply dummy text from the printing and type industry"} btnState={"Compete with Others"} disabled={true} routeChange={routeChange}/>
           </div>
         </div> 
 

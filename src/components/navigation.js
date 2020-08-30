@@ -9,7 +9,7 @@ import { ReactComponent as LoginIcon } from '../assets/images/loginIcon.svg'
 import { Link } from 'react-router-dom';
 
 
-function Navigation() {
+function Navigation({bgColor}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
@@ -20,7 +20,7 @@ function Navigation() {
 
   return (
     <div className="navbar">
-      <Navbar bg="none" variant="dark" expand="lg" fixed="top">
+      <Navbar bg={bgColor} variant="dark" expand="lg" fixed="top">
         <div class="container">
           <Navbar.Brand><Link to="/home" style={{ color: 'inherit', textDecoration: 'none' }}>CodeBattle</Link></Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -1,0 +1,59 @@
+.editor .compiler .card-header{
+    background: rgb(52,58,64);
+    color: white;
+}
+.editor .compiler .card-header .dropdown-toggle{
+    color: white;
+}
+.editor .compiler .card{
+    border: none;
+}
+.editor .compiler .submitBtn{
+    background: teal;
+    border-color: teal;
+    border-radius: inherit;
+}
+.editor .compiler .submitBtn:hover{
+    background: rgb(4, 90, 90);
+    border-color: rgb(4, 90, 90);
+}
+.editor .compiler .submitBtn:active{
+    background: teal;
+    border-color: teal;
+}
+.editor .compiler .runCodeBtn{
+    border-radius: inherit;
+}
+.editor .compiler .consoleBtn{
+    color: teal;
+    border-color: teal;
+    border-radius: inherit;
+}
+.editor .compiler .consoleBtn:hover{
+    background: white;
+}
+.editor .compiler .consoleBtn:active{
+    background: white;
+    color: teal;
+}
+.editor .compiler .consoleBtn:active:focus{
+   box-shadow: 0 0 0 0.15rem rgba(0,128,128,.5);
+}
+
+.consoleCard .nav-tabs .nav-link:hover{
+    border-color: transparent;
+}   
+.consoleCard .nav-tabs .nav-link:focus{
+    outline: transparent;
+}  
+.consoleCard a {
+    color: white;
+}
+.editor .problemSectionLoader{
+    display: flex;
+    margin: auto;
+    margin: 40%;
+}
+/* .consoleCard .nav-tabs .nav-link:active{
+    color: #495057;
+} */

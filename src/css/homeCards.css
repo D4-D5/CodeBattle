@@ -20,6 +20,11 @@
     box-shadow: none;
     background: teal;
   }
+  .homeCards .card button:disabled{
+    background: teal;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
   .btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
     color: #fff;
     background-color: teal;

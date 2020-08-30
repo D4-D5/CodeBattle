@@ -1,0 +1,39 @@
+.primaryBtn:hover{
+    background:  rgb(4, 90, 90);
+    color: white;
+  }
+
+.primaryBtn{
+    background: teal;
+    color: white;
+    border-radius: 1020px;
+}
+.primaryBtn:disabled{
+  background: teal;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.primaryBtn:disabled:hover{
+  background: teal;
+  box-shadow: none;
+}
+@media (max-width: 900px)
+{
+  .primaryBtn{
+    font-size: 0.9rem;
+  }
+}
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+/* @media (min-width: 1150px)
+{
+  html{
+    overflow: hidden;
+  }
+} */
+

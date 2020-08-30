@@ -1,5 +1,5 @@
 //URLS
-export const BASE_ADDRESS = "https://d52c70f1f89e.ngrok.io";
+export const BASE_ADDRESS = "https://e1440d8446cd.ngrok.io";
 export const LOBBY_ADDRESS = BASE_ADDRESS+"/lobby";
 export const CREATE_PROBLEM = BASE_ADDRESS+"/api/createProblem";
 export const UPDATE_PROBLEM = BASE_ADDRESS+"/api/updateProblem";
