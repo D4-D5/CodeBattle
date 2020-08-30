@@ -9,7 +9,7 @@ import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from 'ckeditor5-build-classic-mathtype'
 import MyChip from '../components/myChips'
 import SlidingPane from "react-sliding-pane";
-import { DIFFICULTY, CREATE_PROBLEM, GET_PROBLEMS, UPDATE_PROBLEM,SEND_FOR_REVIEW } from '../constants';
+import { DIFFICULTY, CREATE_PROBLEM, GET_PROBLEMS, UPDATE_PROBLEM, SEND_FOR_REVIEW } from '../constants';
 import { Link } from 'react-router-dom';
 import QuestionTemplate from '../components/questionTemplate';
 // import MathType from '@wiris/mathtype-ckeditor5';
@@ -20,7 +20,7 @@ import QuestionTemplate from '../components/questionTemplate';
 
 
 class CreateProblem extends Component {
-    
+
     state = {
         validated: false,
         isPaneOpen: false,
@@ -33,7 +33,7 @@ class CreateProblem extends Component {
         idealSolution: "",
         inputSpecification: "",
         outputSpecification: "",
-        ioExplaination: "",
+        ioExplanation: "",
         timeLimit: 5,
         memoryLimit: 256,
         //        maxCodeSize: 0,
@@ -43,7 +43,7 @@ class CreateProblem extends Component {
         fileInputTestCase: null,
         fileOutputTestCase: null,
         problems: [],
-        constraints: "$n$",
+        constraints: "",
         languageId: "54",
         languageTitle: "C++ (GCC 9.2.0)",
         problemActionType: "New",
@@ -156,7 +156,7 @@ class CreateProblem extends Component {
             idealSolution: "",
             inputSpecification: "",
             outputSpecification: "",
-            ioExplaination: "",
+            ioExplanation: "",
             timeLimit: 5,
             memoryLimit: 256,
             fileSampleInput: null,
@@ -172,10 +172,10 @@ class CreateProblem extends Component {
             isPaneOpen: true
         })
     }
-    submitProblemForReview = (problem) =>{
+    submitProblemForReview = (problem) => {
         var targetUrl = SEND_FOR_REVIEW
         const formData = new FormData()
-        formData.append("id",problem.id)
+        formData.append("id", problem.id)
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -206,10 +206,10 @@ class CreateProblem extends Component {
     }
 
     editProblem = (problem) => {
-        var tempTags=[]
+        var tempTags = []
 
         problem.tags.forEach(tag => {
-            tempTags.push(tag.tagName) 
+            tempTags.push(tag.tagName)
         });
 
         console.log(tempTags)
@@ -255,8 +255,8 @@ class CreateProblem extends Component {
             targetUrl = UPDATE_PROBLEM
         }
         const {
-            fileSampleInput,
-            fileSampleOutput,
+            sampleInput,
+            sampleOutput,
             fileIdealSolution,
             fileInputTestCase,
             fileOutputTestCase,
@@ -266,7 +266,7 @@ class CreateProblem extends Component {
             chips,
             inputSpecification,
             outputSpecification,
-            ioExplaination,
+            ioExplanation,
             timeLimit,
             memoryLimit,
             // maxCodeSize,
@@ -279,12 +279,12 @@ class CreateProblem extends Component {
 
         if (this.isDataValid()) {
             const formData = new FormData()
-            if (fileSampleInput) {
-                formData.append("fileSampleInput", fileSampleInput[0])
-            }
-            if (fileSampleOutput) {
-                formData.append("fileSampleOutput", fileSampleOutput[0])
-            }
+            // if (fileSampleInput) {
+            //     formData.append("fileSampleInput", fileSampleInput[0])
+            // }
+            // if (fileSampleOutput) {
+            //     formData.append("fileSampleOutput", fileSampleOutput[0])
+            // }
             if (fileIdealSolution) {
                 formData.append("fileIdealSolution", fileIdealSolution[0])
             }
@@ -303,12 +303,14 @@ class CreateProblem extends Component {
             formData.append("tags", chips)
             formData.append("inputSpecification", inputSpecification)
             formData.append("outputSpecification", outputSpecification)
-            formData.append("ioExplaination", ioExplaination)
+            formData.append("ioExplanation", ioExplanation)
             formData.append("timeLimit", timeLimit)
             formData.append("memoryLimit", memoryLimit)
             // formData.append("maxCodeSize", maxCodeSize)
             formData.append("constraints", constraints)
             formData.append("idealSolutionLanguageId", languageId)
+            formData.append("sampleInput", sampleInput)
+            formData.append("sampleOutput", sampleOutput)
             formData.append("authorId", localStorage.getItem("codeBattleId"))
 
             const requestOptions = {
@@ -411,7 +413,7 @@ class CreateProblem extends Component {
     render() {
 
         const { problems, validated, problemTitle, problemStatement, isPaneOpen, difficultyLevel, chips,
-            sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplaination,
+            sampleInput, sampleOutput, inputSpecification, outputSpecification, ioExplanation,
             languageId, languageTitle, constraints, timeLimit, memoryLimit } = this.state
 
         const question = {
@@ -423,10 +425,10 @@ class CreateProblem extends Component {
             "sampleOutput": sampleOutput,
             "inputSpecification": inputSpecification,
             "outputSpecification": outputSpecification,
-            "ioExplaination": ioExplaination,
+            "ioExplanation": ioExplanation,
             "constraints": constraints
         }
-        
+
         const tooltipSolutionDetails = (props) => (
             <Tooltip id="button-tooltip" {...props}>
                 The sample input and output must be uploaded in the format of .txt files up to the size of 5 MB.
@@ -449,7 +451,7 @@ class CreateProblem extends Component {
             <div className="row" style={{ height: "92vh" }}>
                 <div className="w-50" >
                     <QuestionTemplate question={question} />
-                    {/* <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplaination={ioExplaination} /> */}
+                    {/* <ProblemSection problemTitle={problemTitle} problemStatement={problemStatement} sampleInput={sampleInput} sampleOutput={sampleOutput} inputSpecification={inputSpecification} outputSpecification={outputSpecification} ioExplanation={ioExplanation} /> */}
                 </div>
                 <div className="w-50">
                     <Button variant="outline-primary" onClick={() => this.onCreateProblem()}>
@@ -473,15 +475,15 @@ class CreateProblem extends Component {
                                                         {problem.problemTitle}
                                                     </Link>
                                                 </div>
-                                                
-                                                <Badge  pill variant="dark">{problem.problemStatus}</Badge>
+
+                                                <Badge pill variant="dark">{problem.problemStatus}</Badge>
 
                                                 <div className="pl-4">
                                                     <Button onClick={(e) => this.editProblem(problems[index])}>
                                                         Edit
                                                     </Button>
                                                 </div>
-                                                
+
                                                 <div className="pl-4">
                                                     <Button disabled={(problem.problemStatus == "IN_DRAFT") ? null : true} onClick={(e) => this.submitProblemForReview(problems[index])}>
                                                         Submit For Review
@@ -576,7 +578,20 @@ class CreateProblem extends Component {
 
                                     </OverlayTrigger>
                                     <Form.Row>
-                                        <Form.File
+                                        <div>
+                                            <Form.Label>Sample Input File</Form.Label>
+                                            <textarea value={sampleInput} id="sampleInput" onChange={this.handleTextChange}>
+
+                                            </textarea>
+                                            </div>
+                                            <div>
+                                            <Form.Label>Sample Output File</Form.Label>
+                                            <textarea value={sampleOutput} id="sampleOutput"  onChange={this.handleTextChange}>
+
+                                            </textarea>
+                                            </div>
+
+                                        {/* <Form.File
                                             multiple
                                             required
                                             id="sampleInput"
@@ -590,7 +605,7 @@ class CreateProblem extends Component {
                                             label="Sample Output File"
                                             accept=".txt"
                                             onChange={(e) => this.showFile(e, "sampleOutput", "fileSampleOutput")}
-                                        />
+                                        /> */}
                                     </Form.Row>
                                 </Form.Group>
 
@@ -598,9 +613,9 @@ class CreateProblem extends Component {
                                     <Form.Label><strong>Sample Explanation</strong></Form.Label>
                                     <CKEditor
                                         editor={ClassicEditor}
-                                        data={ioExplaination}
+                                        data={ioExplanation}
                                         id="sampleExplanation"
-                                        onChange={(event, editor) => this.handleEditorChange(editor, "ioExplaination")}
+                                        onChange={(event, editor) => this.handleEditorChange(editor, "ioExplanation")}
                                     />
                                 </Form.Group>
                                 <Form.Group>

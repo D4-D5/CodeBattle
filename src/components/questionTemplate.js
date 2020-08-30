@@ -22,17 +22,13 @@ class QuestionTemplate extends Component {
     constructor(props) {
         super(props);
         const script = document.createElement("script");
-
+        script.type = "text/x-mathjax-config";
         script[(window.opera ? "innerHTML" : "text")] =
             "MathJax.Hub.Config({\n" +
             "  tex2jax: { inlineMath: [['$','$'], ['\\\\(','\\\\)']] }\n" +
             "});"
         script.async = true;
-        script.type = "text/x-mathjax-config";
         document.body.appendChild(script);
-
-
-        //MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] } });
     }
 
     componentDidMount() {
@@ -46,12 +42,11 @@ class QuestionTemplate extends Component {
     }
 
     componentDidUpdate() {
-        
         const script = document.createElement("script");
 
         script[(window.opera ? "innerHTML" : "text")] =
             "MathJax.Hub.Queue([\"Typeset\", MathJax.Hub, document.querySelector('.challenge__description')]);"
-        script.async = true;
+        //script.defer = true;
         script.type = "text/x-mathjax-config";
         document.body.appendChild(script);
     }
